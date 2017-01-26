@@ -35,7 +35,8 @@ export default Ember.Service.extend({
   },
 
   stateMatches: function(actual) {
-    return true
+    print(actual);
+    return true;
     //var expected = this.get('session.githubState');
     //return actual && expected === actual;
   },
