@@ -80,7 +80,7 @@ export default Ember.Component.extend({
   dropdownLabel: function() {
     let out = '';
     let intl = this.get('intl');
-    if ( this.get('access.provider') === 'githubconfig' )
+    if ( this.get('access.provider') === 'fiwareconfig' )
     {
       out = intl.findTranslationByKey('inputIdentity.dropdownLabel.teams');
     }
