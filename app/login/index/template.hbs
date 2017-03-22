@@ -12,6 +12,11 @@
         <br/>
       {{/if}}
 
+      {{#if isFiware}}
+        <p>{{t 'loginPage.githubMessage' appName=settings.appName}}</p>
+        <br/>
+      {{/if}}
+
      {{#if isShibboleth}}
         <p>{{t 'loginPage.shibbolethMessage' appName=settings.appName}}</p>
         <br/>
