@@ -2,8 +2,6 @@
   <div class="input-group">
     {{#if (eq access.provider 'githubconfig')}}
       {{input type="text" value=addInput placeholder=(t 'inputIdentity.placeholder.github') class="form-control"}}
-    {{#if (eq access.provider 'fiwareconfig')}}
-      {{input type="text" value=addInput placeholder=(t 'inputIdentity.placeholder.github') class="form-control"}}
     {{else}}
       {{input type="text" value=addInput placeholder=(t 'inputIdentity.placeholder.generic') class="form-control"}}
     {{/if}}

@@ -32,6 +32,9 @@
       {{#if isGithub}}
         {{login-github action="started" waiting=waiting}}
       {{/if}}
+      {{#if isFiware}}
+        {{login-fiware action="started" waiting=waiting}}
+      {{/if}}
       {{#if isShibboleth}}
         {{login-shibboleth action="started" waiting=waiting}}
       {{/if}}
