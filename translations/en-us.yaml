@@ -206,6 +206,14 @@ authPage:
       shibboleth: Shibboleth
   root:
     header: Access Control
+  fiware:
+    standard: Fiware
+    testAuth:
+      header: '3. Test and enable authentication'
+      subtext: 'Check that your application is configured correctly by testing authentication with it:'
+      buttonText:
+        pre: Authenticate with Fiware
+        post: Waiting to hear back from Fiware
   github:
     standard: GitHub
     enterprise: GitHub Enterprise
@@ -727,6 +735,7 @@ k8sTab:
 
 loginPage:
   greeting: "Howdy!<br>Welcome to {appName}"
+  fiwareMessage: "{appName} uses Fiware to manage accounts.  Click the button below to log in and give us read-only access to your basic Fiware account information."
   githubMessage: "{appName} uses GitHub to manage accounts and teams.  Click the button below to log in and give us read-only access to your basic GitHub account information."
   shibbolethMessage: "{appName} uses Shibboleth to manage accounts.  Click the button below to log in to the configured Shibboleth IDP."
   shibbolethError:
@@ -2292,6 +2301,9 @@ labelsSection:
 loginShibboleth:
   buttonText: Authenticate with Shibboleth
 
+loginFiware:
+  buttonText: Authenticate with Fiware Lab
+
 loginGithub:
   buttonText: Authenticate with GitHub
 
@@ -3413,4 +3425,3 @@ model:
     min: Minimum Scale
     max: Maximum Scale
     amount: By
-
