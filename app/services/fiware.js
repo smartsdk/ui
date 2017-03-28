@@ -35,7 +35,7 @@ export default Ember.Service.extend({
   },
 
   stateMatches: function(actual) {
-    print(actual);
+    //print(actual);
     return true;
     //var expected = this.get('session.fiwareState');
     //return actual && expected === actual;
@@ -58,7 +58,7 @@ export default Ember.Service.extend({
   },
 
   authorizeRedirect: function() {
-    window.location.href = this.getAuthorizeUrl();
+    window.location.href = this.getAuthorizeUrl(false);
   },
 
   authorizeTest: function(cb) {
