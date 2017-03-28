@@ -5,6 +5,7 @@ export default Ember.Route.extend({
   access         : Ember.inject.service(),
   cookies        : Ember.inject.service(),
   github         : Ember.inject.service(),
+  fiware         : Ember.inject.service(),
   language       : Ember.inject.service('user-language'),
   modal          : Ember.inject.service(),
   settings       : Ember.inject.service(),
