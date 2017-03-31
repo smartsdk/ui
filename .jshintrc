@@ -14,10 +14,10 @@
     "async",
     "AWS",
     "Identicon",
-    "md5",
     "_",
     "NoVNC",
-    "commonmark"
+    "commonmark",
+    "Stripe"
   ],
   "browser" : true,
   "boss" : true,
