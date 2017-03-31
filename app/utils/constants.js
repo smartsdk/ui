@@ -1,5 +1,4 @@
-const KIND_USER = 'user';
-const KIND_CATALOG = 'catalog';
+const KIND_USER = 'user'; const KIND_CATALOG = 'catalog';
 const KIND_SYSTEM = 'system';
 const KIND_SYSTEM_CATALOG = 'system-catalog';
 const KIND_LEGACY_KUBERNETES = 'kubernetes';
@@ -10,32 +9,28 @@ const KIND_INFRA = 'infra';
 const KIND_NOT_ORCHESTRATION = 'cattle';
 
 var C = {
-  BULK_ACTIONS: [
-    {
-      "label": "action.start",
-      "icon": "icon icon-play",
-      "action": "start",
-      "bulkActionName": "Start",
-    },
-    {
-      "label": "action.stop",
-      "icon": "icon icon-stop",
-      "action": "promptStop",
-      "bulkActionName": "Stop",
-    },
-    {
-      "label": "action.restart",
-      "icon": "icon icon-refresh",
-      "action": "restart",
-      "bulkActionName": "Restart",
-    },
-    {
-      "label": "action.remove",
-      "icon": "icon icon-trash",
-      "action": "promptDelete",
-      "bulkActionName": "Delete",
-    },
-  ],
+  AUTH_TYPES: {
+    AdminAuth: 'None',
+    BasicAuth: 'API Key',
+    HeaderAuth: 'HeaderAuth',
+    RegistrationToken: 'Host Registration',
+    TokenAccount: 'TokenAccount',
+    TokenAuth: 'UI Session'
+  },
+
+  CAPABILITY: {
+    NETWORK_POLICIES: 'network-policy-manager',
+    SECRETS: 'secrets',
+  },
+
+  CATALOG: {
+    LIBRARY_KEY: 'library',
+    LIBRARY_VALUE: 'https://git.rancher.io/rancher-catalog.git',
+    COMMUNITY_KEY: 'community',
+    COMMUNITY_VALUE: 'https://git.rancher.io/community-catalog.git',
+    DEFAULT_BRANCH: 'master',
+  },
+
   COOKIE: {
     TOKEN: 'token',
     PL: 'PL',
@@ -49,8 +44,7 @@ var C = {
     GROUP_SEPARATOR: ':',
     BASE_SEPARATOR: '*',
     ID_SEPARATOR: ':',
-    KIND_ALL: 'all',
-    KIND_USER: KIND_USER,
+    KIND_ALL: 'containers', KIND_USER: KIND_USER,
     KIND_CATALOG: KIND_CATALOG,
     KIND_SYSTEM: KIND_SYSTEM,
     KIND_SYSTEM_CATALOG: KIND_SYSTEM_CATALOG,
@@ -84,12 +78,12 @@ var C = {
     CATALOG_DEFAULT_GROUP: 'library',
   },
 
-  CATALOG: {
-    LIBRARY_KEY: 'library',
-    LIBRARY_VALUE: 'https://git.rancher.io/rancher-catalog.git',
-    COMMUNITY_KEY: 'community',
-    COMMUNITY_VALUE: 'https://git.rancher.io/community-catalog.git',
-    DEFAULT_BRANCH: 'master',
+  EXT_REFERENCES: {
+    FORUM: 'https://forums.rancher.com',
+    COMPANY: 'http://rancher.com',
+    GITHUB: 'https://github.com/rancher/rancher',
+    DOCS: 'http://docs.rancher.com/rancher',
+    SLACK: 'https://slack.rancher.io',
   },
 
   GITHUB: {
@@ -106,7 +100,13 @@ var C = {
     CSRF: 'X-Api-Csrf',
     NO_CHALLENGE: 'X-Api-No-Challenge',
     NO_CHALLENGE_VALUE: 'true',
+    PROJECT_ID: 'X-Api-Project-Id',
     RANCHER_VERSION: 'X-Rancher-Version',
+  },
+
+  K8S: {
+    BASE: 'api',
+    BASE_VERSION: 'api/v1',
   },
 
   KEY: {
@@ -152,7 +152,8 @@ var C = {
     DOCKER_VERSION: 'io.rancher.host.docker_version',
     KERNEL_VERSION: 'io.rancher.host.linux_kernel_version',
     KVM: 'io.rancher.host.kvm',
-    SCHED_IPS: 'io.rancher.host.ip_set',
+    SCHED_IPS: 'io.rancher.scheduler.ips',
+    REQUIRE_ANY: 'io.rancher.scheduler.require_any',
 
     // Kubernetes
     K8S_DASHBOARD: 'io.rancher.k8s.kubernetes-dashboard',
@@ -175,36 +176,54 @@ var C = {
     SIDEKICK: 'io.rancher.sidekicks',
   },
 
-  PREFS: {
-    ACCESS_WARNING  : 'accessWarning',
-    BODY_BACKGROUND : 'bodyBackground',
-    PROJECT_DEFAULT : 'defaultProjectId',
-    EXPANDED_STACKS : 'expandedStacks',
-    SORT_STACKS_BY  : 'sortStacksBy',
-    THEME           : 'theme',
-    TABLE_COUNT     : 'tableCount',
-    LANGUAGE        : 'language',
-    I_HATE_SPINNERS : 'ihatespinners',
-    FEEDBACK        : 'feedback',
-    SHOW_SYSTEM     : 'showSystem',
-  },
-
   LANGUAGE: {
     DEFAULT: 'en-us',
     FORMAT_RELATIVE_TIMEOUT: 1000,
     DOCS: ['en'],
   },
 
-  TABLES: {
-    DEFAULT_COUNT: 50
-
+  // CSS map to driver icons
+  MACHINE_DRIVER_IMAGES: {
+    AMAZONEC2: 'amazonec2',
+    AZURE: 'azure',
+    DIGITALOCEAN: 'digitalocean',
+    EXOSCALE: 'exoscale',
+    GENERIC: 'generic',
+    OPENSTACK: 'openstack',
+    PACKET: 'packet',
+    RACKSPACE: 'rackspace',
+    UBIQUITY: 'ubiquity',
+    VMWAREVSPHERE: 'vmwarevsphere',
+    OTHER: 'other',
+    CUSTOM: 'custom',
+    ALIYUNECS: 'aliyunecs',
   },
 
-  THEME: {
-    AUTO_UPDATE_TIMER : 1800000,
-    START_HOUR        : 7,
-    END_HOUR          : 18,
-    DEFAULT           : 'ui-light',
+  MESOS: {
+    HEALTH: 'health',
+    FRAMEWORKS: 'frameworks',
+    MASTER_SERVICE: 'mesos-master',
+    MASTER_PORT: 5050,
+  },
+
+  MODE: {
+    OSS: 'oss', // Regular community UI
+    CAAS: 'caas', // Container cloud UI
+  },
+
+  PREFS: {
+    ACCESS_WARNING  : 'accessWarning',
+    BODY_BACKGROUND : 'bodyBackground',
+    PROJECT_DEFAULT : 'defaultProjectId',
+    EXPANDED_STACKS : 'expandedStacks',
+    SORT_STACKS_BY  : 'sortStacksBy',
+    HOST_VIEW       : 'hostView',
+    THEME           : 'theme',
+    TABLE_COUNT     : 'tableCount',
+    LANGUAGE        : 'language',
+    I_HATE_SPINNERS : 'ihatespinners',
+    FEEDBACK        : 'feedback',
+    SHOW_SYSTEM     : 'showSystem',
   },
 
   PROJECT: {
@@ -227,6 +246,11 @@ var C = {
 
     ROLE_MEMBER:  'member',
     ROLE_OWNER:   'owner',
+
+    SUPPORTS_NETWORK_POLICY: [
+      'ipsec',
+      'vxlan',
+    ]
   },
 
   PROJECT_TEMPLATE: {
@@ -235,24 +259,19 @@ var C = {
 
   // Ephemeral but same but across all browser tabs
   SESSION: {
-    BACK_TO        : 'backTo',
-    USER_ID        : 'user',
     ACCOUNT_ID     : 'accountId',
-    USER_TYPE      : 'userType',
-    PROJECT        : 'projectId',
-    IDENTITY       : 'userIdentity',
-    IDENTITY_TYPE  : 'userType',
+    BACK_TO        : 'backTo',
+    CONTAINER_ROUTE: 'containerSubRoute',
     GITHUB_CACHE   : 'githubCache',
     GITHUB_ORGS    : 'orgs',
     GITHUB_TEAMS   : 'teams',
+    IDENTITY       : 'userIdentity',
+    IDENTITY_TYPE  : 'userType',
     LANGUAGE       : 'language',
     LOGIN_LANGUAGE : 'loginLanguage',
-  },
-
-  // Ephemeral and unique for each browser tab
-  TABSESSION: {
-    PROJECT: 'projectId',
-    NAMESPACE: 'namespaceId',
+    PROJECT        : 'projectId',
+    USER_ID        : 'user',
+    USER_TYPE      : 'userType',
   },
 
   SETTING: {
@@ -286,6 +305,24 @@ var C = {
     BALANCER_IMAGE:            'lb$instance$image',
     PROJECT_VERSION:           'account$version',
     FEEDBACK_FORM:             'ui$feedback$form',
+    SHOW_SYSTEM:               'ui$show$system',
+  },
+
+  TABLES: {
+    DEFAULT_COUNT: 50
+  },
+
+  // Ephemeral and unique for each browser tab
+  TABSESSION: {
+    PROJECT: 'projectId',
+    NAMESPACE: 'namespaceId',
+  },
+
+  THEME: {
+    AUTO_UPDATE_TIMER : 1800000,
+    START_HOUR        : 7,
+    END_HOUR          : 18,
+    DEFAULT           : 'ui-light',
   },
 
   USER: {
@@ -293,52 +330,6 @@ var C = {
     TYPE_ADMIN: 'admin',
     BASIC_BEARER: 'x-api-bearer',
   },
-
-  AUTH_TYPES: {
-    AdminAuth: 'None',
-    BasicAuth: 'API Key',
-    HeaderAuth: 'HeaderAuth',
-    RegistrationToken: 'Host Registration',
-    TokenAccount: 'TokenAccount',
-    TokenAuth: 'UI Session'
-  },
-
-  EXT_REFERENCES: {
-    FORUM: 'https://forums.rancher.com',
-    COMPANY: 'http://rancher.com',
-    GITHUB: 'https://github.com/rancher/rancher',
-    DOCS: 'http://docs.rancher.com/rancher',
-    SLACK: 'https://slack.rancher.io',
-  },
-
-  K8S: {
-    BASE: 'api',
-    BASE_VERSION: 'api/v1',
-  },
-
-  MESOS: {
-    HEALTH: 'health',
-    FRAMEWORKS: 'frameworks',
-    MASTER_SERVICE: 'mesos-master',
-    MASTER_PORT: 5050,
-  },
-
-  // CSS map to driver icons
-  MACHINE_DRIVER_IMAGES: {
-    AMAZONEC2: 'amazonec2',
-    AZURE: 'azure',
-    DIGITALOCEAN: 'digitalocean',
-    EXOSCALE: 'exoscale',
-    GENERIC: 'generic',
-    OPENSTACK: 'openstack',
-    PACKET: 'packet',
-    RACKSPACE: 'rackspace',
-    UBIQUITY: 'ubiquity',
-    VMWAREVSPHERE: 'vmwarevsphere',
-    OTHER: 'other',
-    CUSTOM: 'custom',
-    ALIYUNECS: 'aliyunecs',
-  }
 };
 
 C.TOKEN_TO_SESSION_KEYS = [
@@ -362,6 +353,7 @@ C.SYSTEM_LABELS_WITH_CONTROL = [
   C.LABEL.START_ONCE,
   C.LABEL.REQUESTED_IP,
   C.LABEL.PULL_IMAGE,
+  C.LABEL.REQUIRE_ANY,
   C.LABEL.SCHED_IPS,
   C.LABEL.AGENT_IMAGE,
   C.LABEL.DOCKER_VERSION,
@@ -413,12 +405,14 @@ C.SUPPORTED_SCHEMA_INPUTS= [
   'date',
   'enum',
   'float',
+  'host',
   'int',
   'multiline',
   'password',
   'service',
   'string',
   'masked',
+  'secret',
 ];
 
 

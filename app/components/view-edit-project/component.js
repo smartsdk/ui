@@ -1,10 +1,9 @@
 import Ember from 'ember';
-import Sortable from 'ui/mixins/sortable';
 import C from 'ui/utils/constants';
 import NewOrEdit from 'ui/mixins/new-or-edit';
 import { sortInsensitiveBy } from 'ui/utils/sort';
 
-export default Ember.Component.extend(NewOrEdit, Sortable, {
+export default Ember.Component.extend(NewOrEdit, {
   projects: Ember.inject.service(),
   access: Ember.inject.service(),
   growl: Ember.inject.service(),
@@ -14,18 +13,35 @@ export default Ember.Component.extend(NewOrEdit, Sortable, {
   project: null,
   originalProject: null,
   allProjects: null,
+  policyManager: null,
   editing: false,
   tab: 'access',
-
   primaryResource: Ember.computed.alias('project'),
-  sortableContent: Ember.computed.alias('project.projectMembers'),
-  sortBy: 'name',
-  sorts: {
-    name:   ['name', 'externalId'],
-    type:   ['externalIdType','externalId'],
-    role:   ['role','externalId'],
-  },
 
+  sortBy: 'name',
+  headers:  [
+    {
+      name:           'name',
+      sort:           ['name', 'externalId'],
+      translationKey: 'generic.name',
+    },
+    {
+      name:           'type',
+      sort:           ['externalIdType','externalId'],
+      translationKey: 'generic.type',
+    },
+    {
+      name:           'role',
+      sort:           ['role','externalId'],
+      translationKey: 'generic.role',
+      width:          '',
+    },
+    {
+      sort:           [],
+      translationKey: '',
+      width:          '40',
+    },
+  ],
   stacks: null,
 
   actions: {
@@ -113,6 +129,26 @@ export default Ember.Component.extend(NewOrEdit, Sortable, {
     return this.get('project.projectMembers').filterBy('role', C.PROJECT.ROLE_OWNER).get('length') > 0;
   }.property('project.projectMembers.@each.role'),
 
+  npWithinStack: function() {
+    return this.get('network.policy').findBy('within','stack');
+  }.property('network.policy.@each.within'),
+
+  npWithinService: function() {
+    return this.get('network.policy').findBy('within','service');
+  }.property('network.policy.@each.within'),
+
+  npWithinLinked: function() {
+    return this.get('network.policy').findBy('within','linked');
+  }.property('network.policy.@each.within'),
+
+  missingManager: function() {
+    return !this.get('policyManager');
+  }.property('policyManager'),
+
+  hasUnsupportedPolicy: function() {
+    return this.get('network.policy').filter((x) => { return !!!(x.get('within')); }).length > 0;
+  }.property('network.policy.@each.within'),
+
   validate() {
     this._super();
     var errors = this.get('errors')||[];
@@ -143,19 +179,35 @@ export default Ember.Component.extend(NewOrEdit, Sortable, {
   },
 
   didSave() {
-    if ( this.get('editing') && this.get('access.enabled') )
-    {
-      var members = this.get('project.projectMembers').map((member) => {
-        return {
-          type: 'projectMember',
-          externalId: member.externalId,
-          externalIdType: member.externalIdType,
-          role: member.role
-        };
-      });
+    var promises = [];
 
-      return this.get('project').doAction('setmembers',{members: members});
+    if ( this.get('editing') )
+    {
+      if ( this.get('access.enabled') )
+      {
+        var members = this.get('project.projectMembers').map((member) => {
+          return {
+            type: 'projectMember',
+            externalId: member.externalId,
+            externalIdType: member.externalIdType,
+            role: member.role
+          };
+        });
+
+        promises.push(this.get('project').doAction('setmembers',{members: members}));
+      }
     }
+
+    if ( this.get('project.id') && this.get('network') && !this.get('hasUnsupportedPolicy') )
+    {
+      promises.push(this.get('network').save({
+        headers: {
+          [C.HEADER.PROJECT_ID]: this.get('project.id'),
+        }
+      }));
+    }
+
+    return Ember.RSVP.all(promises);
   },
 
   doneSaving() {

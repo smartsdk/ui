@@ -3,6 +3,7 @@ var pkg  = require('../package.json');
 var fs   = require('fs');
 var YAML = require('yamljs');
 
+var mode = process.env.UI_MODE || 'oss'; // 'caas' or 'oss'
 
 // host can be an ip "1.2.3.4" -> http://1.2.3.4:8080
 // or a URL+port
@@ -60,6 +61,7 @@ module.exports = function(environment) {
       }
     },
 
+
     minifyCSS: {
         enabled: false
     },
@@ -86,6 +88,8 @@ module.exports = function(environment) {
       // when it is created
       version: pkg.version,
       appName: 'Rancher',
+      mode: mode,
+      isCaas: mode === 'caas',
       apiServer: 'http://localhost:8080',
       legacyApiEndpoint: '/v1',
       apiEndpoint: '/v2-beta',
@@ -100,14 +104,19 @@ module.exports = function(environment) {
       kubernetesEndpoint: '/r/projects/%PROJECTID%/kubernetes',
       kubectlEndpoint: '/r/projects/%PROJECTID%/kubectld:8091/v1-kubectl',
       kubernetesDashboard: '/r/projects/%PROJECTID%/kubernetes-dashboard:9090/#',
+      kubernetesWorkload: '/r/projects/%PROJECTID%/kubernetes-dashboard:9090/api/v1/workload?itemsPerPage=1',
       mesosEndpoint: '/r/projects/%PROJECTID%/mesos-master:5050',
+      swarmDashboard: '/r/projects/%PROJECTID%/portainer/',
       projectEndpoint: '/v2-beta/projects/%PROJECTID%',
       proxyEndpoint: '/v2-beta/proxy',
       wsEndpoint: '/v2-beta/projects/%PROJECTID%/subscribe' +
                     '?eventNames=resource.change' +
                     '&limit=-1',
       baseAssets: '/',
-      locales: readLocales(environment)
+      locales: readLocales(environment),
+      stripe: {
+        publishableKey: 'pk_test_g925RcuVORh2KgHWfFbE80by'
+      },
     },
   };
 

@@ -4,6 +4,7 @@ import { parseExternalId } from 'ui/utils/parse-externalid';
 import C from 'ui/utils/constants';
 import { download } from 'ui/utils/util';
 import { denormalizeIdArray } from 'ember-api-store/utils/denormalize';
+import StateCounts from 'ui/mixins/state-counts';
 
 export function activeIcon(stack)
 {
@@ -36,13 +37,20 @@ export function tagChoices(all) {
   return choices;
 }
 
-var Stack = Resource.extend({
+var Stack = Resource.extend(StateCounts, {
+
   type: 'stack',
   k8s: Ember.inject.service(),
   modalService: Ember.inject.service('modal'),
   projectsService: Ember.inject.service('projects'),
 
   services: denormalizeIdArray('serviceIds'),
+  realServices: Ember.computed.filterBy('services','isReal',true),
+
+  init() {
+    this._super(...arguments);
+    this.defineStateCounts('services', 'serviceStates', 'serviceCountSort');
+  },
 
   actions: {
     activateServices: function() {
@@ -78,7 +86,7 @@ var Stack = Resource.extend({
 
 
     addService: function() {
-      this.get('router').transitionTo('service.new', {
+      this.get('router').transitionTo('scalin-groups.new', {
         queryParams: {
           stackId: this.get('id'),
         },
@@ -86,7 +94,7 @@ var Stack = Resource.extend({
     },
 
     addBalancer: function() {
-      this.get('router').transitionTo('service.new-balancer', {
+      this.get('router').transitionTo('balancers.new', {
         queryParams: {
           stackId: this.get('id'),
         },
@@ -208,6 +216,15 @@ var Stack = Resource.extend({
     return parseExternalId(this.get('externalId'));
   }.property('externalId'),
 
+  isDefault: function() {
+    return (this.get('name')||'').toLowerCase() === 'default';
+  }.property('name'),
+
+  isFromCatalog: function() {
+    let kind = this.get('externalIdInfo.kind');
+    return kind === C.EXTERNAL_ID.KIND_CATALOG || kind === C.EXTERNAL_ID.KIND_SYSTEM_CATALOG;
+  }.property('externalIdInfo.kind'),
+
   grouping: function() {
     var kind = this.get('externalIdInfo.kind');
 
@@ -242,7 +259,7 @@ var Stack = Resource.extend({
 
     let have = this.get('tags');
     for ( let i = 0 ; i < want.length ; i++ ) {
-      if ( !have.contains(want[i]) ) {
+      if ( !have.includes(want[i]) ) {
         return false;
       }
     }

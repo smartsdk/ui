@@ -3,8 +3,9 @@ import Ember from 'ember';
 import C from 'ui/utils/constants';
 import Util from 'ui/utils/util';
 import { denormalizeId, denormalizeIdArray } from 'ember-api-store/utils/denormalize';
+import StateCounts from 'ui/mixins/state-counts';
 
-var Service = Resource.extend({
+var Service = Resource.extend(StateCounts, {
   type: 'service',
   intl: Ember.inject.service(),
   growl: Ember.inject.service(),
@@ -14,21 +15,18 @@ var Service = Resource.extend({
   instanceCount: Ember.computed.alias('instances.length'),
   stack: denormalizeId('stackId'),
 
+  init() {
+    this._super(...arguments);
+    this.defineStateCounts('instances', 'instanceStates', 'instanceCountSort');
+  },
+
+  lcType: Ember.computed('type', function() {
+    return (this.get('type')||'').toLowerCase();
+  }),
+
   actions: {
     edit() {
-      var type = this.get('type').toLowerCase();
-      if ( type === 'dnsservice' )
-      {
-        this.get('modalService').toggleModal('edit-aliasservice', this);
-      }
-      else if ( type === 'externalservice' )
-      {
-        this.get('modalService').toggleModal('edit-externalservice', this);
-      }
-      else
-      {
-        this.get('modalService').toggleModal('edit-service', this);
-      }
+      this.get('modalService').toggleModal('modal-edit-dns', this);
     },
 
     activate() {
@@ -80,11 +78,9 @@ var Service = Resource.extend({
     },
 
     upgrade(upgradeImage='false') {
-      var route = 'service.new';
-      if ( (this.get('launchConfig.kind')||'').toLowerCase() === 'virtualmachine') {
-        route = 'service.new-virtualmachine';
-      } else if ( this.get('type').toLowerCase() === 'loadbalancerservice' ) {
-        route = 'service.new-balancer';
+      var route = 'scaling-groups.new';
+      if ( this.get('lcType') === 'loadbalancerservice' ) {
+        route = 'balancers.new';
       }
 
       this.get('application').transitionToRoute(route, {queryParams: {
@@ -97,21 +93,12 @@ var Service = Resource.extend({
 
     clone() {
       var route;
-      switch ( this.get('type').toLowerCase() )
+      switch ( this.get('lcType') )
       {
-        case 'service':
-          if ( (this.get('launchConfig.kind')||'').toLowerCase() === 'virtualmachine')
-          {
-            route = 'service.new-virtualmachine';
-          }
-          else
-          {
-            route = 'service.new';
-          }
-          break;
-        case 'dnsservice':          route = 'service.new-alias';    break;
-        case 'loadbalancerservice': route = 'service.new-balancer'; break;
-        case 'externalservice':     route = 'service.new-external'; break;
+        case 'service':             route = 'scaling-groups.new'; break;
+        case 'dnsservice':          route = 'dns.new';            break;
+        case 'loadbalancerservice': route = 'balancers.new';      break;
+        case 'externalservice':     route = 'dns.new';            break;
         default: return void this.send('error','Unknown service type: ' + this.get('type'));
       }
 
@@ -146,19 +133,19 @@ var Service = Resource.extend({
     var isSwarm = this.get('isSwarm');
     var canHaveContainers = this.get('canHaveContainers');
     var isBalancer = this.get('isBalancer');
-    var isDriver = ['networkdriverservice','storagedriverservice'].includes(this.get('type').toLowerCase());
+    var isDriver = ['networkdriverservice','storagedriverservice'].includes(this.get('lcType'));
 
     var choices = [
-      { label: 'action.start',          icon: 'icon icon-play',             action: 'activate',       enabled: !!a.activate},
-      { label: 'action.finishUpgrade',  icon: 'icon icon-success',          action: 'finishUpgrade',  enabled: !!a.finishupgrade },
+      { label: 'action.finishUpgrade',  icon: 'icon icon-success',          action: 'finishUpgrade',  enabled: !!a.finishupgrade, bulkable: true },
       { label: 'action.rollback',       icon: 'icon icon-history',          action: 'rollback',       enabled: !!a.rollback },
       { label: (isBalancer ? 'action.upgradeOrEdit' : 'action.upgrade'),        icon: 'icon icon-arrow-circle-up',  action: 'upgrade',        enabled: canUpgrade },
       { label: 'action.cancelUpgrade',  icon: 'icon icon-life-ring',        action: 'cancelUpgrade',  enabled: !!a.cancelupgrade },
       { label: 'action.cancelRollback', icon: 'icon icon-life-ring',        action: 'cancelRollback', enabled: !!a.cancelrollback },
       { divider: true },
-      { label: 'action.restart',        icon: 'icon icon-refresh'    ,      action: 'restart',        enabled: !!a.restart && canHaveContainers },
-      { label: 'action.stop',           icon: 'icon icon-stop',             action: 'promptStop',     enabled: !!a.deactivate, altAction: 'deactivate'},
-      { label: 'action.remove',         icon: 'icon icon-trash',            action: 'promptDelete',   enabled: !!a.remove, altAction: 'delete'},
+      { label: 'action.start',          icon: 'icon icon-play',             action: 'activate',       enabled: !!a.activate, bulkable: true},
+      { label: 'action.restart',        icon: 'icon icon-refresh'    ,      action: 'restart',        enabled: !!a.restart && canHaveContainers, bulkable: true },
+      { label: 'action.stop',           icon: 'icon icon-stop',             action: 'promptStop',     enabled: !!a.deactivate, altAction: 'deactivate', bulkable: true},
+      { label: 'action.remove',         icon: 'icon icon-trash',            action: 'promptDelete',   enabled: !!a.remove, altAction: 'delete', bulkable: true},
       { label: 'action.purge',          icon: '',                           action: 'purge',          enabled: !!a.purge},
       { divider: true },
       { label: 'action.viewInApi',      icon: 'icon icon-external-link',    action: 'goToApi',        enabled: true },
@@ -167,7 +154,7 @@ var Service = Resource.extend({
     ];
 
     return choices;
-  }.property('actionLinks.{activate,deactivate,restart,update,remove,purge,finishupgrade,cancelupgrade,rollback,cancelrollback}','type','isK8s','isSwarm','canHaveContainers','canUpgrade','isBalancer'),
+  }.property('actionLinks.{activate,deactivate,restart,update,remove,purge,finishupgrade,cancelupgrade,rollback,cancelrollback}','lcType','isK8s','isSwarm','canHaveContainers','canUpgrade','isBalancer'),
 
 
   serviceLinks: null, // Used for clone
@@ -175,9 +162,9 @@ var Service = Resource.extend({
     'serviceLinks',
   ],
 
-  init() {
-    this._super();
-  },
+  displayImage: function() {
+    return (this.get('launchConfig.imageUuid')||'').replace(/^docker:/,'');
+  }.property('launchConfig.imageUuid'),
 
   displayStack: function() {
     var stack = this.get('stack');
@@ -206,20 +193,6 @@ var Service = Resource.extend({
 
     return out.sortBy('name');
   }.property('linkedServices'),
-
-  // Only for old Load Balancer to get ports map
-  consumedServicesWithNamesAndPorts: function() {
-    let store = this.get('store');
-    return store.all('serviceconsumemap').filterBy('serviceId', this.get('id')).map((map) => {
-      return Ember.Object.create({
-        name: map.get('name'),
-        service: store.getById('service', map.get('consumedServiceId')),
-        ports: map.get('ports')||[],
-      });
-    }).filter((obj) => {
-      return obj && obj.get('service.id');
-    });
-  }.property('id','state').volatile(),
 
   combinedState: function() {
     var service = this.get('state');
@@ -257,49 +230,58 @@ var Service = Resource.extend({
   }.property('isReal','isGlobalScale'),
 
   canHaveContainers: function() {
-    if ( this.get('isReal') ) {
+    if ( this.get('isReal') || this.get('isSelector') ) {
       return true;
     }
 
     return [
       'kubernetesservice',
       'composeservice',
-    ].includes(this.get('type').toLowerCase());
-  }.property('isReal','type'),
+    ].includes(this.get('lcType'));
+  }.property('isReal','isSelector','lcType'),
 
   isReal: function() {
+    let type = this.get('lcType');
+    if ( this.get('isSelector') ) {
+      return false;
+    }
+
     return [
       'service',
       'networkdriverservice',
       'storagedriverservice',
       'loadbalancerservice',
-    ].includes(this.get('type').toLowerCase());
-  }.property('type'),
+    ].includes(type);
+  }.property('lcType','isSelector'),
 
   hasPorts: Ember.computed.alias('isReal'),
   hasImage: Ember.computed.alias('isReal'),
   hasLabels: Ember.computed.alias('isReal'),
   canUpgrade: Ember.computed.alias('isReal'),
 
+  isSelector: function() {
+    return !!this.get('selectorContainer');
+  }.property('selectorContainer'),
+
   isBalancer: function() {
-    return ['loadbalancerservice'].indexOf(this.get('type').toLowerCase()) >= 0;
-  }.property('type'),
+    return ['loadbalancerservice'].indexOf(this.get('lcType')) >= 0;
+  }.property('lcType'),
 
   canBalanceTo: function() {
-    if ( this.get('type').toLowerCase() === 'externalservice' && this.get('hostname') !== null) {
+    if ( this.get('lcType') === 'externalservice' && this.get('hostname') !== null) {
       return false;
     }
 
     return true;
-  }.property('type','hostname'),
+  }.property('lcType','hostname'),
 
   isK8s: function() {
-    return ['kubernetesservice'].indexOf(this.get('type').toLowerCase()) >= 0;
-  }.property('type'),
+    return ['kubernetesservice'].indexOf(this.get('lcType')) >= 0;
+  }.property('lcType'),
 
   isSwarm: function() {
-    return ['composeservice'].indexOf(this.get('type').toLowerCase()) >= 0;
-  }.property('type'),
+    return ['composeservice'].indexOf(this.get('lcType')) >= 0;
+  }.property('lcType'),
 
   displayType: function() {
     let known = [
@@ -309,32 +291,30 @@ var Service = Resource.extend({
       'kubernetesservice',
       'composeservice',
       'networkdriverservice',
+      'selectorservice',
       'storagedriverservice',
       'service'
     ];
 
-    let type = this.get('type').toLowerCase();
+    let type = this.get('lcType');
+    if ( this.get('isSelector') ) {
+      type = 'selectorservice';
+    }
+
     if ( !known.includes(type) ) {
       type = 'service';
     }
 
     return this.get('intl').t('servicePage.type.'+ type);
-  }.property('type','intl._locale'),
+  }.property('lcType','isSelector','intl._locale'),
 
   hasSidekicks: function() {
     return this.get('secondaryLaunchConfigs.length') > 0;
   }.property('secondaryLaunchConfigs.length'),
 
-  displayDetail: function() {
-    let translation = this.get('intl').findTranslationByKey('generic.image');
-    translation = this.get('intl').formatMessage(translation);
-      return ('<label>'+ translation +': </label><span>' + (this.get('launchConfig.imageUuid')||'').replace(/^docker:/,'') + '</span>').htmlSafe();
-  }.property('launchConfig.imageUuid', 'intl._locale'),
-
-
   activeIcon: function() {
     return activeIcon(this);
-  }.property('type'),
+  }.property('lcType'),
 
   endpointsMap: function() {
     var out = {};
@@ -371,13 +351,15 @@ var Service = Resource.extend({
     return out;
   }.property('endpointsMap'),
 
+  endpointPorts: Ember.computed.mapBy('endpointsByPort','port'),
+
   displayPorts: function() {
     var pub = '';
 
     this.get('endpointsByPort').forEach((obj) => {
       var url = Util.constructUrl(false, obj.ipAddresses[0], obj.port);
       pub += '<span>' +
-        '<a href="'+ url +'" target="_blank">' +
+        '<a href="'+ url +'" target="_blank" rel="nofollow noopener">' +
           obj.port +
         '</a>,' +
       '</span> ';
@@ -389,9 +371,7 @@ var Service = Resource.extend({
 
     if ( pub )
     {
-      let out = this.get('intl').findTranslationByKey('generic.ports');
-      out = this.get('intl').formatMessage(out);
-      return ('<label>'+out+': </label>' + pub).htmlSafe();
+      return pub.htmlSafe();
     }
     else
     {
@@ -409,7 +389,7 @@ var Service = Resource.extend({
 export function activeIcon(service)
 {
   var out = 'icon icon-services';
-  switch ( service.get('type').toLowerCase() )
+  switch ( service.get('lcType') )
   {
     case 'loadbalancerservice': out = 'icon icon-fork';    break;
     case 'dnsservice':          out = 'icon icon-compass'; break;

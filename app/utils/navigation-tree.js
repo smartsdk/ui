@@ -1,8 +1,5 @@
 import Ember from 'ember';
 import C from 'ui/utils/constants';
-import { getCatalogNames } from 'ui/utils/parse-catalog-setting';
-import { tagChoices } from 'ui/models/stack';
-import { uniqKeys } from 'ui/utils/util';
 
 // Useful context/condition shortcuts
 export const getProjectId = function() { return this.get('projectId'); };
@@ -30,7 +27,6 @@ export const isOwner = function() { return this.get('isOwner'); };
       // return true if the alert (!) icon should be displayed
       // can depend on anything page-header/component.js shouldUpdateNavTree() depends on
     }
-    url: 'http://any/url', (url or route required)
     target: '_blank', (for url only)
     route: 'target.route.path', // as in link-to
     ctx: ['values', 'asContextToRoute', orFunctionThatReturnsValue, anotherFunction]
@@ -52,39 +48,6 @@ const navTree = [
     route: 'k8s-tab',
     ctx: [getProjectId],
     condition: function() { return this.get('hasKubernetes'); },
-    submenu: [
-      {
-        id: 'k8s-notready',
-        icon: 'icon icon-spinner icon-spin',
-        localizedLabel: 'nav.notReady',
-        condition: k8sNotReady,
-      },
-      {
-        id: 'k8s-dashboard',
-        localizedLabel: 'nav.k8s.dashboard',
-        icon: 'icon icon-kubernetes',
-        route: 'k8s-tab.dashboard',
-        ctx: [getProjectId],
-        condition: k8sReady,
-      },
-      {
-        id: 'k8s-cli',
-        localizedLabel: 'nav.k8s.cli',
-        icon: 'icon icon-terminal',
-        route: 'k8s-tab.kubectl',
-        ctx: [getProjectId],
-        condition: k8sReady,
-      },
-      {
-        id: 'k8s-system',
-        localizedLabel: 'nav.k8s.system',
-        icon: 'icon icon-network',
-        route: 'stacks',
-        condition: isOwner,
-        ctx: [getProjectId],
-        queryParams: {which: C.EXTERNAL_ID.KIND_NOT_ORCHESTRATION},
-      },
-    ],
   },
 
   // Swarm
@@ -94,13 +57,20 @@ const navTree = [
     condition: function() { return this.get('hasProject') && this.get('hasSwarm'); },
     route: 'swarm-tab',
     ctx: [getProjectId],
-    moreCurrentWhen: ['stacks'],
     submenu: [
       {
         id: 'swarm-cli',
         localizedLabel: 'nav.swarm.cli',
         icon: 'icon icon-terminal',
         route: 'swarm-tab.console',
+        ctx: [getProjectId],
+        condition: swarmReady,
+      },
+      {
+        id: 'swarm-dashboard',
+        localizedLabel: 'nav.swarm.dashboard',
+        icon: 'icon icon-link',
+        route: 'swarm-tab.dashboard',
         ctx: [getProjectId],
         condition: swarmReady,
       },
@@ -114,7 +84,7 @@ const navTree = [
         id: 'swarm-system',
         localizedLabel: 'nav.swarm.system',
         icon: 'icon icon-network',
-        route: 'stacks',
+        route: 'scaling-groups',
         condition: isOwner,
         ctx: [getProjectId],
         queryParams: {which: C.EXTERNAL_ID.KIND_NOT_ORCHESTRATION},
@@ -148,7 +118,7 @@ const navTree = [
         id: 'mesos-system',
         localizedLabel: 'nav.mesos.system',
         icon: 'icon icon-network',
-        route: 'stacks',
+        route: 'scaling-groups',
         condition: isOwner,
         ctx: [getProjectId],
         queryParams: {which: C.EXTERNAL_ID.KIND_NOT_ORCHESTRATION},
@@ -158,29 +128,36 @@ const navTree = [
 
   // Cattle
   {
-    id: 'cattle',
-    localizedLabel: 'nav.cattle.tab',
-    route: 'stacks',
-    queryParams: {which: C.EXTERNAL_ID.KIND_USER, tags: ''},
+    id: 'containers',
+    localizedLabel: function() {
+      if ( this.get('hasKubernetes') || this.get('hasMesos') || this.get('hasSwarm') ) {
+        return 'nav.containers.systemTab';
+      } else {
+        return 'nav.containers.tab';
+      }
+    },
+    route: 'authenticated.project.index',
     ctx: [getProjectId],
-    condition: function() { return this.get('hasProject') && !this.get('hasKubernetes') && !this.get('hasSwarm') && !this.get('hasMesos'); },
-    submenu: getStacksSubtree,
+    moreCurrentWhen: ['containers','scaling-groups','balancers','dns'],
   },
 
-  // Catalog
   {
-    id: 'catalog',
-    localizedLabel: 'nav.catalog.tab',
-    route: 'catalog-tab',
-    queryParams: {catalogId: 'all'},
+    id: 'hosts',
+    localizedLabel: 'nav.hosts.tab',
+    route: 'hosts',
+    ctx: [getProjectId],
+  },
+
+  // App Catalog
+  {
+    id: 'apps',
+    localizedLabel: 'nav.apps.tab',
+    route: 'apps-tab',
     ctx: [getProjectId],
     condition: function() {
       return this.get('hasProject') &&
-      this.get(`settings.${C.SETTING.CATALOG_URL}`) &&
-      !this.get('hasKubernetes') &&
-      !this.get('hasSwarm');
+      this.get(`settings.${C.SETTING.CATALOG_URL}`);
     },
-    submenu: getCatalogSubtree,
   },
 
   // Infrastructure
@@ -191,28 +168,6 @@ const navTree = [
     ctx: [getProjectId],
     condition: function() { return this.get('hasProject'); },
     submenu: [
-      {
-        id: 'infra-hosts',
-        localizedLabel: 'nav.infra.hosts',
-        icon: 'icon icon-host',
-        route: 'hosts',
-        ctx: [getProjectId],
-      },
-      {
-        id: 'infra-containers',
-        localizedLabel: 'nav.infra.containers',
-        icon: 'icon icon-box',
-        route: 'containers',
-        ctx: [getProjectId],
-      },
-      {
-        id: 'infra-vms',
-        localizedLabel: 'nav.infra.vms',
-        icon: 'icon icon-vm',
-        route: 'virtualmachines',
-        ctx: [getProjectId],
-        condition: function() { return this.get('hasVm'); },
-      },
       {
         id: 'infra-storagepools',
         localizedLabel: 'nav.infra.storagePage',
@@ -249,6 +204,20 @@ const navTree = [
         localizedLabel: 'nav.infra.registries',
         icon: 'icon icon-database',
         route: 'registries',
+        ctx: [getProjectId],
+      },
+      {
+        id: 'infra-keys',
+        localizedLabel: 'nav.infra.keys',
+        icon: 'icon icon-key',
+        route: 'authenticated.project.api.keys',
+        ctx: [getProjectId],
+      },
+      {
+        id: 'infra-hooks',
+        localizedLabel: 'nav.infra.hooks',
+        icon: 'icon icon-link',
+        route: 'authenticated.project.api.hooks',
         ctx: [getProjectId],
       },
     ],
@@ -313,31 +282,6 @@ const navTree = [
     ],
   },
 
-  // API
-  {
-    id: 'api',
-    localizedLabel: 'nav.api.tab',
-    icon: 'icon icon-terminal',
-    route: 'authenticated.project.api.keys',
-    ctx: [getProjectId],
-    condition: function() { return this.get('hasProject'); },
-    submenu: [
-      {
-        id: 'api-keys',
-        localizedLabel: 'nav.api.keys',
-        icon: 'icon icon-key',
-        route: 'authenticated.project.api.keys',
-        ctx: [getProjectId],
-      },
-      {
-        id: 'api-hooks',
-        localizedLabel: 'nav.api.hooks',
-        icon: 'icon icon-link',
-        route: 'authenticated.project.api.hooks',
-        ctx: [getProjectId],
-      },
-    ],
-  },
 ];
 
 export function addItem(opt) {
@@ -363,123 +307,4 @@ export function removeId(id) {
 
 export function get() {
   return Ember.copy(navTree,true);
-}
-
-function getStacksSubtree() {
-  let out = [
-    {
-      id: 'cattle-all',
-      localizedLabel: 'nav.cattle.all',
-      icon: 'icon icon-globe',
-      route: 'stacks',
-      ctx: [getProjectId],
-      queryParams: {which: C.EXTERNAL_ID.KIND_ALL, tags: ''},
-    },
-    { divider: true },
-    {
-      id: 'cattle-user',
-      localizedLabel: 'nav.cattle.user',
-      icon: 'icon icon-layers',
-      route: 'stacks',
-      ctx: [getProjectId],
-      queryParams: {which: C.EXTERNAL_ID.KIND_USER, tags: ''},
-      condition: isOwner,
-    },
-    {
-      id: 'cattle-infra',
-      localizedLabel: 'nav.cattle.system',
-      icon: 'icon icon-gear',
-      route: 'stacks',
-      ctx: [getProjectId],
-      condition: isOwner,
-      queryParams: {which: C.EXTERNAL_ID.KIND_INFRA, tags: ''},
-    }
-  ];
-
-  let stacks = this.get('store').all('stack');
-  let choices = uniqKeys(tagChoices(stacks)).sort();
-
-  if ( choices.length ) {
-    out.push({divider: true});
-
-    choices.forEach((choice) => {
-      out.push({
-        id: 'cattle-tag-'+choice,
-        label: choice,
-        icon: 'icon icon-tag',
-        route: 'stacks',
-        ctx: [getProjectId],
-        condition: isOwner,
-        queryParams: {which: C.EXTERNAL_ID.KIND_ALL, tags: choice},
-      });
-    });
-  }
-
-
-  return out;
-}
-
-function getCatalogSubtree() {
-  let repos = getCatalogNames(this.get(`settings.${C.SETTING.CATALOG_URL}`));
-  let showAll = repos.length > 1;
-
-  let out = [];
-  if ( showAll ) {
-    out.push({
-      id: 'catalog-all',
-      localizedLabel: 'nav.catalog.all',
-      icon: 'icon icon-globe',
-      route: 'catalog-tab',
-      ctx: [getProjectId],
-      queryParams: {catalogId: 'all'}
-    });
-
-    out.push({divider: true});
-  }
-
-  if (repos.indexOf(C.CATALOG.LIBRARY_KEY) >= 0 ) {
-    repos.removeObject(C.CATALOG.LIBRARY_KEY);
-    out.push({
-      id: 'catalog-library',
-      localizedLabel: 'nav.catalog.library',
-      icon: 'icon icon-catalog',
-      route: 'catalog-tab',
-      ctx: [getProjectId],
-      queryParams: {catalogId: 'library'}
-    });
-  }
-
-  if (repos.indexOf(C.CATALOG.COMMUNITY_KEY) >= 0 ) {
-    repos.removeObject(C.CATALOG.COMMUNITY_KEY);
-    out.push({
-      id: 'catalog-community',
-      localizedLabel: 'nav.catalog.community',
-      icon: 'icon icon-users',
-      route: 'catalog-tab',
-      ctx: [getProjectId],
-      queryParams: {catalogId: 'community'}
-    });
-  }
-
-  if ( out.length > 2 ) {
-    out.push({divider: true});
-  }
-
-  repos.forEach((repo) => {
-    out.push({
-      id: 'catalog-'+repo,
-      label: repo,
-      icon: 'icon icon-user',
-      route: 'catalog-tab',
-      ctx: [getProjectId],
-      queryParams: {catalogId: repo}
-    });
-  });
-
-
-  if ( out.length === 1 ) {
-    return [];
-  } else {
-    return out;
-  }
 }

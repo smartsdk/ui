@@ -5,7 +5,6 @@ export default Ember.Route.extend({
   access         : Ember.inject.service(),
   cookies        : Ember.inject.service(),
   github         : Ember.inject.service(),
-  fiware         : Ember.inject.service(),
   language       : Ember.inject.service('user-language'),
   modal          : Ember.inject.service(),
   settings       : Ember.inject.service(),
@@ -49,7 +48,10 @@ export default Ember.Route.extend({
             this.set('hideTimer', Ember.run.next(hide));
           } else {
             //console.log('Loading finished', id, this.get('loadingId'));
-            hide();
+            //needed to set this to run after render as there was wierdness wiht new register page
+            Ember.run.scheduleOnce('afterRender', () => {
+              hide();
+            });
           }
         }
       });

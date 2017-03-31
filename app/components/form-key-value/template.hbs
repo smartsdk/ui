@@ -1,9 +1,12 @@
 {{#if editing}}
-  <button class="btn-circle-text" {{action "add"}}><i class="icon icon-plus-circle"/> <span>{{t addActionLabel}}</span></button>
+  <button class="btn bg-link icon-btn " {{action "add"}}>
+  <i class="icon icon-plus text-small"/> 
+  <span>{{t addActionLabel}}</span>
+  </button>
 {{/if}}
 
 {{#if ary.length}}
-  <table class="table fixed no-lines no-top-padding tight small">
+  <table class="table fixed no-lines no-top-padding">
     <tr class="text-muted hidden-xs hidden-sm">
       <th>{{t keyLabel}}</th>
       <th width="30">&nbsp;</th>
@@ -12,9 +15,9 @@
     </tr>
     {{#each ary as |row|}}
       <tr>
-        <td class="valign-top" data-title="{{t keyLabel}}:">
+        <td data-title="{{t keyLabel}}:">
           {{#if editing}}
-            {{input-paste pasted="pastedLabels" class="form-control input-sm key" type="text" value=row.key placeholder=keyPlaceholder}}
+            {{input-paste pasted="pastedLabels" class="form-control input-sm key" type="text" value=row.key placeholder=keyPlaceholder disabled=(eq row.editable false)}}
           {{else}}
             {{row.key}}
           {{/if}}
@@ -22,16 +25,16 @@
 
         <td class="valign-top text-center">
           {{#if editing}}
-            <p class="form-control-static input-sm">{{t 'formKeyValue.separator'}}</p>
+            <p class="input-sm">{{t 'formKeyValue.separator'}}</p>
           {{/if}}
         </td>
 
-        <td class="valign-top" data-title="{{t valueLabel}}:">
+        <td data-title="{{t valueLabel}}:">
           {{#if editing}}
             {{#if allowMultilineValue}}
-              {{textarea-autogrow class="form-control input-sm value" value=row.value placeholder=valuePlaceholder}}
+              {{textarea-autogrow class="form-control input-sm value" value=row.value placeholder=valuePlaceholder disabled=(eq row.editable false)}}
             {{else}}
-              {{input class="form-control input-sm value" type="text" value=row.value placeholder=valuePlaceholder}}
+              {{input class="form-control input-sm value" type="text" value=row.value placeholder=valuePlaceholder disabled=(eq row.editable false)}}
             {{/if}}
           {{else}}
             {{row.value}}
@@ -40,7 +43,7 @@
 
         <td class="valign-top text-right">
           {{#if editing}}
-            <button class="btn btn-primary btn-sm" {{action "remove" row}}><i class="icon icon-minus"/><span class="sr-only">{{t 'generic.remove'}}</span></button>
+            <button class="btn bg-primary btn-sm" {{action "remove" row}}><i class="icon icon-minus"/><span class="sr-only">{{t 'generic.remove'}}</span></button>
           {{/if}}
         </td>
       </tr>
@@ -53,6 +56,6 @@
   {{/if}}
 {{else}}
   {{#unless editing}}
-    <div class="form-control-static">{{t 'generic.none'}}</div>
+    <div>{{t 'generic.none'}}</div>
   {{/unless}}
 {{/if}}

@@ -5,6 +5,7 @@ const NONE       = 'none',
       LOADING    = 'loading',
       CURRENT    = 'current',
       AVAILABLE  = 'available',
+      REQUIRED   = 'required',
       INPROGRESS = 'inprogress',
       UPGRADED   = 'upgraded',
       NOTFOUND   = 'notfound',
@@ -68,8 +69,17 @@ function getUpgradeInfo(task, cb) {
     }
 
     if (upgradeVersions && obj.get('upgradeStatus') !== UPGRADED) {
+      let status = CURRENT;
+      if ( Object.keys(upgradeVersions).length ) {
+        if ( upgradeInfo.catalogId === C.CATALOG.LIBRARY_KEY && upgradeInfo.templateBase === C.EXTERNAL_ID.KIND_INFRA ) {
+          status = REQUIRED;
+        } else {
+          status = AVAILABLE;
+        }
+      }
+
       obj.setProperties({
-        upgradeStatus: Object.keys(upgradeVersions).length ? AVAILABLE : CURRENT,
+        upgradeStatus: status,
         upgradeVersions: upgradeVersions,
         allVersions: allVersions,
       });
@@ -113,15 +123,17 @@ export default Ember.Mixin.create({
       case NONE:
         return 'hide';
       case CURRENT:
-        return 'btn-info';
       case LOADING:
+        return 'bg-transparent';
       case NOTFOUND:
       case ERROR:
       case INPROGRESS:
-        return 'btn-disabled';
+        return 'bg-disabled';
+      case REQUIRED:
+        return 'bg-error';
       case AVAILABLE:
       case UPGRADED:
-        return 'btn-warning';
+        return 'bg-warning';
     }
   }),
 
@@ -136,17 +148,15 @@ export default Ember.Mixin.create({
   }),
 
   doUpgrade() {
-    let upgradeInfo = this.get('upgradeInfo');
     let status = this.get('upgradeStatus');
 
-    if ( [AVAILABLE,CURRENT].indexOf(status) >= 0 )
+    if ( [REQUIRED,AVAILABLE,CURRENT].indexOf(status) >= 0 )
     {
-      // Hackery, but no good way to get the template from upgradeInfo
-      var tpl = upgradeInfo.id;
-
-      this.get('application').transitionToRoute('catalog-tab.launch', tpl, {queryParams: {
+      let templateId = this.get('model.externalIdInfo.templateId');
+      let versionId = this.get('upgradeInfo.id');
+      this.get('application').transitionToRoute('catalog-tab.launch', templateId, {queryParams: {
         stackId: this.get('model.id'),
-        upgrade: this.get('upgradeInfo.id'),
+        upgrade: versionId
       }});
     }
     else if ( status === UPGRADED )
