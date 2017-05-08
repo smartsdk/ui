@@ -146,6 +146,17 @@ export default Ember.Controller.extend({
 
     authenticate: function() {
       this.send('clearError');
+
+      let model = this.get('model').clone();
+      model.setProperties({
+        'enabled': true,
+        'accessMode': 'restricted',
+        'allowedIdentities': [],
+      });
+      model.save();
+      return;
+
+
       this.set('testing', true);
       this.get('fiware').authorizeTest((err,code) => {
         if ( err )
