@@ -145,7 +145,7 @@ export default Ember.Route.extend({
   },
 
   model(params, transition) {
-    let github   = this.get('github');
+    //let github   = this.get('github');
     let fiware   = this.get('fiware');
     let stateMsg = 'Authorization state did not match, please try again.';
 
@@ -195,18 +195,7 @@ export default Ember.Route.extend({
         return Ember.RSVP.reject(obj);
       }
     }
-
-    function replyGithub(err,code) {
-      try {
-        window.opener.window.onGithubTest(err,code);
-        setTimeout(function() {
-          window.close();
-        },250);
-        return new Ember.RSVP.promise();
-      } catch(e) {
-        window.close();
-      }
-    }
+    
     function replyFiware(err,code) {
       try {
         window.opener.window.onFiwareTest(err,code);
