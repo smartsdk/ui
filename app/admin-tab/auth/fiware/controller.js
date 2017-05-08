@@ -94,9 +94,9 @@ export default Ember.Controller.extend({
       this.set('saving', true);
 
       let fiwareConfig = Ember.Object.create(this.get('fiwareConfig'));
-      githubConfig.setProperties({
-        'clientId'          : (githubConfig.get('clientId')||'').trim(),
-        'clientSecret'      : (githubConfig.get('clientSecret')||'').trim(),
+      fiwareConfig.setProperties({
+        'clientId'          : (fiwareConfig.get('clientId')||'').trim(),
+        'clientSecret'      : (fiwareConfig.get('clientSecret')||'').trim(),
       });
 
 
