@@ -156,7 +156,7 @@ export default Ember.Controller.extend({
       model.save();
       return;
 
-
+      /*
       this.set('testing', true);
       this.get('fiware').authorizeTest((err,code) => {
         if ( err )
@@ -170,6 +170,7 @@ export default Ember.Controller.extend({
           this.set('testing', false);
         }
       });
+      */
     },
 
     gotCode: function(code) {
