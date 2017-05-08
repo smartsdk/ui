@@ -5,6 +5,7 @@ export default Ember.Service.extend({
   cookies: Ember.inject.service(),
   session: Ember.inject.service(),
   github:  Ember.inject.service(),
+  fiware:  Ember.inject.service(),
   shibbolethAuth: Ember.inject.service(),
   store: Ember.inject.service(),
   userStore: Ember.inject.service('user-store'),
