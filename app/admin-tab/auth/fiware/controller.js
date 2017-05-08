@@ -165,7 +165,7 @@ export default Ember.Controller.extend({
       this.get('access').login(code).then(res => {
         this.send('authenticationSucceeded', res.body);
       }).catch(res => {
-        // Github auth succeeded but didn't get back a token
+        // Fiware auth succeeded but didn't get back a token
         this.send('gotError', res.body);
       });
     },

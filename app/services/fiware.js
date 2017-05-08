@@ -70,7 +70,7 @@ export default Ember.Service.extend({
       }
     };
 
-    var popup = window.open(this.getAuthorizeUrl(true), 'rancherAuth', Util.popupWindowOptions());
+    var popup = window.open(this.getAuthorizeUrl(false), 'rancherAuth', Util.popupWindowOptions());
     var timer = setInterval(function() {
       if ( !popup || popup.closed ) {
         clearInterval(timer);
