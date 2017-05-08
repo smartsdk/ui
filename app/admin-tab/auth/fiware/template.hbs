@@ -1,11 +1,11 @@
 <section>
   {{#if access.enabled}}
-    <b>{{t 'authPage.fiware.header.enabled.label' fiware=(t providerName)}}</b>
+    <b>Fiware enabled</b>
   {{else}}
     <div class="banner bg-warning">
       <div class="banner-icon"><span class="icon icon-alert"></span></div>
       <div class="banner-message">
-        <p>{{t 'authPage.fiware.header.disabled.label'}}</p>
+        <p>Fiware not enabled</p>
        </div>
     </div>
   {{/if}}
@@ -84,20 +84,26 @@
 
   <form autcomplete="on">
     <section>
-      <h4>{{t 'authPage.fiware.notAuthenticated.form.header' appName=settings.appName}}</h4>
+      <h4>Fiware authentication details</h4>
       <hr/>
-      <p>{{t 'authPage.fiware.notAuthenticated.form.subtext'}}</p>
+      <p>Credentials:</p>
       <div class="row">
         <div class="col span-6">
           <div class="inline-form">
-            <label>{{t 'authPage.fiware.notAuthenticated.form.clientId.labelText'}}*</label>
+            <label>Client ID*</label>
             {{input type="text" name="username" value=fiwareConfig.clientId classNames="form-control"}}
           </div>
         </div>
         <div class="col span-6">
           <div class="inline-form">
-            <label>{{t 'authPage.fiware.notAuthenticated.form.clientSecret.labelText'}}*</label>
+            <label>Client Secret*</label>
             {{input type="password" name="password" value=fiwareConfig.clientSecret classNames="form-control"}}
+          </div>
+        </div>
+        <div class="col span-6">
+          <div class="inline-form">
+            <label>Client Redirect URI*</label>
+            {{input type="text" name="redirecturi" value=fiwareConfig.redirecturi classNames="form-control"}}
           </div>
         </div>
       </div>
