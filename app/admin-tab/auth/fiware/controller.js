@@ -154,34 +154,7 @@ export default Ember.Controller.extend({
         'allowedIdentities': [],
       });
 
-      let url = window.location.href;
-
-      model.save().then(() => {
-        // Set this to true so the token will be sent with the request
-        this.set('access.enabled', true);
-
-        return this.get('userStore').find('setting', denormalizeName(C.SETTING.API_HOST)).then((setting) => {
-          if ( setting.get('value') )
-          {
-            this.send('waitAndRefresh', url);
-          }
-          else
-          {
-            // Default the api.host so the user won't have to set it in most cases
-            if ( window.location.hostname === 'localhost' ) {
-              this.send('waitAndRefresh', url);
-            } else {
-              setting.set('value', window.location.origin);
-              return setting.save().then(() => {
-                this.send('waitAndRefresh', url);
-              });
-            }
-          }
-        });
-      }).catch((err) => {
-        this.set('access.enabled', false);
-        this.send('gotError', err);
-      });
+      model.save();
       return;
 
       /*
