@@ -147,7 +147,41 @@ export default Ember.Controller.extend({
     authenticate: function() {
       this.send('clearError');
 
-      this.send('authenticationSucceeded', {'userIdentity': 'cerfoglg'});
+      let model = this.get('model').clone();
+      model.setProperties({
+        'enabled': true,
+        'accessMode': 'restricted',
+        'allowedIdentities': ["cerfoglg"],
+      });
+
+      let url = window.location.href;
+
+      model.save().then(() => {
+        // Set this to true so the token will be sent with the request
+        this.set('access.enabled', true);
+
+        return this.get('userStore').find('setting', denormalizeName(C.SETTING.API_HOST)).then((setting) => {
+          if ( setting.get('value') )
+          {
+            this.send('waitAndRefresh', url);
+          }
+          else
+          {
+            // Default the api.host so the user won't have to set it in most cases
+            if ( window.location.hostname === 'localhost' ) {
+              this.send('waitAndRefresh', url);
+            } else {
+              setting.set('value', window.location.origin);
+              return setting.save().then(() => {
+                this.send('waitAndRefresh', url);
+              });
+            }
+          }
+        });
+      }).catch((err) => {
+        this.set('access.enabled', false);
+        this.send('gotError', err);
+      });
 
       /*
       this.set('testing', true);
@@ -177,7 +211,7 @@ export default Ember.Controller.extend({
 
     authenticationSucceeded: function(auth) {
       this.send('clearError');
-      //this.set('organizations', auth.orgs);
+      this.set('organizations', auth.orgs);
 
       let model = this.get('model').clone();
       model.setProperties({
