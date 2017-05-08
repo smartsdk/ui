@@ -97,6 +97,7 @@ export default Ember.Controller.extend({
       fiwareConfig.setProperties({
         'clientId'          : (fiwareConfig.get('clientId')||'').trim(),
         'clientSecret'      : (fiwareConfig.get('clientSecret')||'').trim(),
+        'redirecturi'      : (fiwareConfig.get('redirecturi')||'').trim(),
       });
 
 
@@ -107,7 +108,7 @@ export default Ember.Controller.extend({
         'allowedIdentities' : [],
       });
 
-      this.get('github').setProperties({
+      this.get('fiware').setProperties({
         hostname : fiwareConfig.get('hostname'),
         scheme   : fiwareConfig.get('scheme'),
         clientId : fiwareConfig.get('clientId')
