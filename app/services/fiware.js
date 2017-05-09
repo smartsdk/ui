@@ -65,6 +65,7 @@ export default Ember.Service.extend({
     window.onFiwareTest = function(err,code) {
       if ( !responded ) {
         responded = true;
+        console.log("Got code: "+code)
         cb(err,code);
       }
     };
