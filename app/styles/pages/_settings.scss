@@ -11,6 +11,10 @@
     background-image: url('images/providers/github.svg');
   }
 
+  &.fiware {
+    background-image: url('https://pbs.twimg.com/profile_images/503870743285755904/LwMo9pPt.jpeg');
+  }
+
   &.local {
     background-image: url('images/logos/provider-local.svg');
   }
@@ -33,7 +37,7 @@
   .force-wrap {
     width: calc(100% - 60px);
   }
-  
+
   p {
     margin: 0;
     @extend .text-small;

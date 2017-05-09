@@ -12,13 +12,9 @@
 </section>
 {{#if access.enabled}}
   <section>
-    <h3>{{t 'authPage.fiware.authenticated.header.text'}}</h3>
+    <h3>Authenticated with Fiware</h3>
     <hr/>
-    {{#if fiwareConfig.hostname}}
-      <div><b>{{t 'authPage.fiware.authenticated.header.enterpriseHostName'}} </b> <span class="text-muted">{{fiwareConfig.hostname}}</span></div>
-    {{/if}}
-    <div><b>{{t 'authPage.fiware.authenticated.header.clientId.text'}} </b> <span class="text-muted">{{fiwareConfig.clientId}}</span></div>
-    <p class="text-info">{{t 'authPage.fiware.authenticated.header.clientId.helpText'}}</p>
+    <div><b>Client ID: </b> <span class="text-muted">{{fiwareConfig.clientId}}</span></div>
   </section>
 
   {{site-access
@@ -27,20 +23,16 @@
   }}
 
   <section>
-    <h3>{{format-html-message 'authPage.fiware.authenticated.disableAccess.header'}}</h3>
+    <h3>Disable Access</h3>
     <hr/>
-
-    <p>
-      {{format-html-message 'authPage.fiware.authenticated.disableAccess.warning' appName=settings.appName}}
-    </p>
 
     {{#if confirmDisable}}
       <button class="btn bg-error" {{action "disable"}}>
-        <i class="icon icon-alert"></i> {{t 'authPage.fiware.authenticated.disableAccess.confirmDisable'}}
+        <i class="icon icon-alert"></i> CONFIRM?
       </button>
     {{else}}
       <button class="btn bg-error" {{action "promptDisable"}}>
-        <i class="icon icon-umbrella"></i> {{t 'authPage.fiware.authenticated.disableAccess.disable'}}
+        <i class="icon icon-umbrella"></i> DISABLE ACCESS CONTROL
       </button>
     {{/if}}
 
@@ -74,24 +66,6 @@
         </div>
       </div>
       <div class="row">
-        <div class="col span-6">
-          <div class="checkbox">
-            <label>{{input type="checkbox" checked=isEnterprise}} {{t 'authPage.fiware.notAuthenticated.form.ghEnterprise.labelText'}}</label>
-          </div>
-          {{#liquid-if isEnterprise}}
-            <div class="checkbox">
-              <label>{{input type="checkbox" checked=secure}} {{t 'authPage.fiware.notAuthenticated.form.isGHEnterprise.labelText'}} (<code>https://</code>).</label>
-            </div>
-          {{/liquid-if}}
-        </div>
-        <div class="col span-6">
-          {{#liquid-if isEnterprise}}
-          <label>{{t 'authPage.fiware.notAuthenticated.form.enterpriseHost.labelText'}}*</label>
-            {{input type="text" value=fiwareConfig.hostname classNames="form-control" placeholder=(t 'authPage.fiware.notAuthenticated.form.enterpriseHost.placeholder')}}
-          {{/liquid-if}}
-        </div>
-      </div>
-      <div class="row">
         <div class="inline-form">
           <button class="btn bg-primary" style="display: block;margin: 0 auto;" {{action "save"}}>
             {{#if saving}}
@@ -107,21 +81,18 @@
     </section>
 
     <section>
-      <h3>{{t 'authPage.fiware.testAuth.header'}}</h3>
+      <h3>Authenticate with Fiware</h3>
       <hr/>
 
       {{top-errors errors=errors}}
 
       <div class="row">
         <div class="col span-6">
-          <p>{{t 'authPage.fiware.testAuth.subtext'}}</p>
-        </div>
-        <div class="col span-6">
           <button disabled={{createDisabled}} class="btn bg-primary" {{action "authenticate"}}>
             {{#if testing}}
-              <i class="icon icon-spinner icon-spin"></i> {{t 'authPage.fiware.testAuth.buttonText.post'}}
+              <i class="icon icon-spinner icon-spin"></i> Authenticate
             {{else}}
-              <i class="icon icon-fiware"></i> {{t 'authPage.fiware.testAuth.buttonText.pre'}}
+              <i class="icon icon-fiware"></i> Authenticate
             {{/if}}
           </button>
         </div>
