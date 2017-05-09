@@ -146,43 +146,6 @@ export default Ember.Controller.extend({
 
     authenticate: function() {
       this.send('clearError');
-
-      let model = this.get('model').clone();
-      model.setProperties({
-        'enabled': true,
-        'accessMode': 'unrestricted',
-        'allowedIdentities': [{'kind':'fiware_user', 'name':'cerfoglg', 'externalid':'cerfoglg', 'id':'fiware_user:cerfoglg'}],
-      });
-      let url = window.location.href;
-      model.save().then(() => {
-        // Set this to true so the token will be sent with the request
-        this.set('access.enabled', true);
-
-        return this.get('userStore').find('setting', denormalizeName(C.SETTING.API_HOST)).then((setting) => {
-          if ( setting.get('value') )
-          {
-            this.send('waitAndRefresh', url);
-          }
-          else
-          {
-            // Default the api.host so the user won't have to set it in most cases
-            if ( window.location.hostname === 'localhost' ) {
-              this.send('waitAndRefresh', url);
-            } else {
-              setting.set('value', window.location.origin);
-              return setting.save().then(() => {
-                this.send('waitAndRefresh', url);
-              });
-            }
-          }
-        });
-      }).catch((err) => {
-        this.set('access.enabled', false);
-        this.send('gotError', err);
-      });
-      return;
-
-      /*
       this.set('testing', true);
       this.get('fiware').authorizeTest((err,code) => {
         if ( err )
@@ -196,7 +159,6 @@ export default Ember.Controller.extend({
           this.set('testing', false);
         }
       });
-      */
     },
 
     gotCode: function(code) {
@@ -215,7 +177,7 @@ export default Ember.Controller.extend({
       let model = this.get('model').clone();
       model.setProperties({
         'enabled': true,
-        'accessMode': 'restricted',
+        'accessMode': 'unrestricted',
         'allowedIdentities': [auth.userIdentity],
       });
 

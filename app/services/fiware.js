@@ -35,7 +35,6 @@ export default Ember.Service.extend({
   },
 
   stateMatches: function(actual) {
-    //print(actual);
     return actual;
     //var expected = this.get('session.fiwareState');
     //return actual && expected === actual;
