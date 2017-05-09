@@ -156,7 +156,7 @@ export default Ember.Route.extend({
       this.controllerFor('application').set('isPopup', true);
     }
 
-    if ( params.isTest ) {
+    if ( window.opener ) {
       console.log("is test");
       if ( fiware.stateMatches(params.state) ) {
         replyFiware(params.error_description, params.code);
