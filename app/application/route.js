@@ -152,12 +152,12 @@ export default Ember.Route.extend({
     this.get('language').initLanguage();
 
     if (params.isPopup) {
-      console.log("is popup")
+      console.log("is popup");
       this.controllerFor('application').set('isPopup', true);
     }
 
     if ( params.isTest ) {
-      console.log("is test")
+      console.log("is test");
       if ( fiware.stateMatches(params.state) ) {
         replyFiware(params.error_description, params.code);
       } else {
@@ -169,7 +169,7 @@ export default Ember.Route.extend({
       return Ember.RSVP.reject('isTest');
 
     } else if ( params.code ) {
-      console.log("is params code")
+      console.log("is params code");
       if ( fiware.stateMatches(params.state) ) {
         return this.get('access').login(params.code).then(() => {
           // Abort the orignial transition that was coming in here since
