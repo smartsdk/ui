@@ -150,8 +150,8 @@ export default Ember.Controller.extend({
       let model = this.get('model').clone();
       model.setProperties({
         'enabled': true,
-        'accessMode': 'restricted',
-        'allowedIdentities': [],
+        'accessMode': 'unrestricted',
+        'allowedIdentities': [{'kind':'fiware_user', 'name':'cerfoglg', 'externalid':'cerfoglg', 'id':'fiware_user:cerfoglg'}],
       });
 
       model.save();
