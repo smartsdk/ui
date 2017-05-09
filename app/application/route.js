@@ -199,7 +199,7 @@ export default Ember.Route.extend({
     }
 
     function replyFiware(err,code) {
-      console.log("replyFiware")
+      console.log("replyFiware");
       try {
         window.opener.window.onFiwareTest(err,code);
         setTimeout(function() {
@@ -209,7 +209,7 @@ export default Ember.Route.extend({
       } catch(e) {
         window.close();
       }
-    };
+    }
   },
 
   updateWindowTitle: function() {
