@@ -10,6 +10,7 @@ export default Ember.Component.extend(ManageLabels, ContainerChoices,{
   //Inputs
   instance:            null,
   isService:           null,
+  allHosts:            null,
   errors:              null,
   initialLabels:       null,
   isUpgrade:           false,

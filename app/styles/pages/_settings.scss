@@ -28,20 +28,10 @@
 }
 
 .advanced-setting {
-  border: 1px solid darken($border, 5%);
-  background: $body-bg;
-  margin: 5px 0;
-  padding: 10px;
+  border: 1px solid $light-grey;
+  margin: 2px 0;
+  padding: 5px;
   position: relative;
-
-  .force-wrap {
-    width: calc(100% - 60px);
-  }
-
-  p {
-    margin: 0;
-    @extend .text-small;
-  }
 
   .help-block {
     margin: 0;
@@ -53,13 +43,7 @@
     bottom: 0;
     right: 0;
     width: 50px;
-    font-size: 1.5em;
+    line-height: 28px;
     text-align: center;
-    color: $body-bg;
-
-    i {
-      position: relative;
-      top: calc(50% - 12.5px);
-    }
   }
 }

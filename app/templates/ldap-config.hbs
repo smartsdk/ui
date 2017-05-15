@@ -1,15 +1,11 @@
-<section>
+<section class="well">
+  <h2>
     {{#if access.enabled}}
-      <p>{{t 'ldap.header.enabled.label' providerName=(t providerName)}}</p>
+      <b>{{t 'ldap.header.enabled.label' providerName=(t providerName)}}</b>
     {{else}}
-      <div class="banner bg-warning">
-        <div class="banner-icon"><span class="icon icon-alert"></span></div>
-        <div class="banner-message">
-          <p>{{t 'ldap.header.disabled.label' providerName=(t providerName)}}</p>
-         </div>
-      </div>
+      <b class="text-warning">{{t 'ldap.header.disabled.label' providerName=(t providerName)}}</b>
     {{/if}}
-  
+  </h2>
   <div>
     {{#if access.enabled}}
       {{t (concat-str 'ldap.header.enabled.' model.accessMode character='') appName=settings.appName providerName=(t providerName) users=numUsers groups=numGroups}}
@@ -20,24 +16,24 @@
 </section>
 
 {{#if access.enabled}}
-  <section>
+  <section class="well">
     <h3>{{t 'ldap.accessEnabled.header'}}</h3>
     <hr/>
-    <p class="text-info">{{t 'ldap.accessEnabled.subtext'}}</p>
+    <p class="help-block">{{t 'ldap.accessEnabled.subtext'}}</p>
 
     <div class="row">
-      <div class="col span-4">
+      <div class="col-md-4">
         <h4>{{t 'ldap.accessEnabled.general.header'}}</h4>
         <div><b>{{t 'ldap.accessEnabled.general.server'}} </b> <span class="text-muted">{{model.server}}:{{model.port}}</span></div>
         <div><b>{{t 'ldap.accessEnabled.general.tls'}} </b> <span class="text-muted">{{if model.tls "Yes" "No"}}</span></div>
         <div><b>{{t 'ldap.accessEnabled.general.serviceAccount'}} </b> <span class="text-muted">{{model.serviceAccountUsername}}</span></div>
-        <div><b>{{t 'ldap.accessEnabled.general.searchBase'}} </b> <span class="text-muted">{{model.domain}}</span></div>
         {{#unless isOpenLdap}}
           <div><b>{{t 'ldap.accessEnabled.general.defaultDomain'}} </b> <span class="text-muted">{{model.loginDomain}}</span></div>
         {{/unless}}
       </div>
-      <div class="col span-4">
+      <div class="col-md-4">
         <h4>{{t 'ldap.accessEnabled.users.header'}}</h4>
+        <div><b>{{t 'ldap.accessEnabled.general.searchBase'}} </b> <span class="text-muted">{{model.domain}}</span></div>
         <div><b>{{t 'ldap.accessEnabled.users.objectClass'}} </b> <span class="text-muted">{{model.userObjectClass}}</span></div>
         <div><b>{{t 'ldap.accessEnabled.users.login'}} </b> <span class="text-muted">{{model.userLoginField}}</span></div>
         <div><b>{{t 'ldap.accessEnabled.users.name'}} </b> <span class="text-muted">{{model.userNameField}}</span></div>
@@ -45,8 +41,9 @@
         <div><b>{{t 'ldap.accessEnabled.users.enabled'}} </b> <span class="text-muted">{{model.userEnabledAttribute}}</span></div>
         <div><b>{{t 'ldap.accessEnabled.users.disabledBitMask'}} </b> <span class="text-muted">{{model.userDisabledBitMask}}</span></div>
       </div>
-      <div class="col span-4">
+      <div class="col-md-4">
         <h4>{{t 'ldap.accessEnabled.group.header'}}</h4>
+        <div><b>{{t 'ldap.accessEnabled.general.searchBase'}} </b> <span class="text-muted">{{model.groupSearchDomain}}</span></div>
         <div><b>{{t 'ldap.accessEnabled.group.objectClass'}} </b> <span class="text-muted">{{model.groupObjectClass}}</span></div>
         <div><b>{{t 'ldap.accessEnabled.group.name'}} </b> <span class="text-muted">{{model.groupNameField}}</span></div>
         <div><b>{{t 'ldap.accessEnabled.group.search'}} </b> <span class="text-muted">{{model.groupSearchField}}</span></div>
@@ -59,7 +56,7 @@
     collection='siteAccess.organizations'
   }}
 
-  <section>
+  <section class="well">
     <h3>{{format-html-message 'ldap.accessEnabled.disable.header'}}</h3>
     <hr/>
 
@@ -68,11 +65,11 @@
     </p>
 
     {{#if confirmDisable}}
-      <button class="btn bg-error" {{action "disable"}}>
+      <button class="btn btn-danger" {{action "disable"}}>
         <i class="icon icon-alert"></i> {{t 'ldap.accessEnabled.disable.confirmDisable.post'}}
       </button>
     {{else}}
-      <button class="btn bg-error" {{action "promptDisable"}}>
+      <button class="btn btn-danger" {{action "promptDisable"}}>
         <i class="icon icon-umbrella"></i> {{t 'ldap.accessEnabled.disable.confirmDisable.pre'}}
       </button>
     {{/if}}
@@ -81,160 +78,166 @@
 {{/if}}
 
 {{#unless access.enabled}}
-  <section>
+  <section class="well">
     <h3></h3>
     <h3>{{t 'ldap.accessConfig.header' providerName=(t providerName)}}</h3>
     <hr/>
-    <p class="text-info">{{format-html-message 'ldap.accessConfig.subtext1' providerName=(t providerName)}}</p>
+    <p>{{format-html-message 'ldap.accessConfig.subtext1' providerName=(t providerName)}}</p>
     <div class="row">
-      <div class="col span-6">
-        <div class="inline-form">
+      <div class="col-md-6">
+        <div class="form-group">
           <label>{{t 'ldap.accessConfig.hostName.labelText'}}*</label>
-          {{input type="text" value=model.server classNames="form-control"}}
+          {{input value=model.server classNames="form-control"}}
         </div>
       </div>
-      <div class="col span-6">
-        <div class="inline-form">
+      <div class="col-md-6">
+        <div class="form-group">
           <label>{{t 'ldap.accessConfig.port.labelText'}}</label>
           <div class="input-group">
             {{input-integer value=model.port min=1 max=65535 classNames="form-control"}}
-            <span class="input-group-addon bg-default">
+            <span class="input-group-addon">
               <label>{{t 'ldap.accessConfig.port.checkbox'}} {{input type="checkbox" checked=model.tls}}</label>
             </span>
           </div>
         </div>
       </div>
-      <div class="col span-4">
+      <div class="col-md-4">
         <div class="checkbox">
         </div>
       </div>
     </div>
 
-    <p class="text-info">{{t 'ldap.accessConfig.subtext2' appName=settings.appName}}</p>
+    <p>{{t 'ldap.accessConfig.subtext2' appName=settings.appName}}</p>
     <div class="row">
-      <div class="col span-6">
-        <div class="inline-form">
+      {{#unless isOpenLdap}}
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>{{t 'ldap.accessConfig.defaultDomain.labelText'}}</label>
+            {{input value=model.loginDomain classNames="form-control" placeholder=(t 'ldap.accessConfig.defaultDomain.placeholder')}}
+            <p class="help-block">{{t 'ldap.accessConfig.defaultDomain.helpText'}}</p>
+          </div>
+        </div>
+      {{/unless}}
+      <div class="{{if isOpenLdap 'col-md-6' 'col-md-4'}}">
+        <div class="form-group">
           <label>{{t 'ldap.accessConfig.serviceUsername.labelText'}}*</label>
-          {{input type="text" value=model.serviceAccountUsername classNames="form-control"}}
+          {{input value=model.serviceAccountUsername classNames="form-control"}}
         </div>
       </div>
-      <div class="col span-6">
-        <div class="inline-form">
+      <div class="{{if isOpenLdap 'col-md-6' 'col-md-4'}}">
+        <div class="form-group">
           <label>{{t 'ldap.accessConfig.servicePassword.labelText'}}*</label>
           {{input type="password" value=model.serviceAccountPassword classNames="form-control"}}
         </div>
       </div>
     </div>
-
     <div class="row">
-      <div class="col span-6">
-        <div class="inline-form">
-          <p class="text-info">{{t 'ldap.accessConfig.searchBase.helpText'}}</p>
-          <label>{{t 'ldap.accessConfig.searchBase.labelText'}}*</label>
-          {{input type="text" value=model.domain classNames="form-control" placeholder=(t 'ldap.accessConfig.searchBase.placeholder')}}
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>{{t 'ldap.accessConfig.userSearchBase.labelText'}}*</label>
+          {{input value=model.domain classNames="form-control" placeholder=(t 'ldap.accessConfig.userSearchBase.placeholder')}}
+          <p class="help-block">{{t 'ldap.accessConfig.userSearchBase.helpText'}}</p>
         </div>
       </div>
-      {{#unless isOpenLdap}}
-        <div class="col span-6">
-          <p class="text-info">{{t 'ldap.accessConfig.defaultDomain.helpText'}}</p>
-          <div class="inline-form">
-            <label>{{t 'ldap.accessConfig.defaultDomain.labelText'}}</label>
-            {{input type="text" value=model.loginDomain classNames="form-control" placeholder=(t 'ldap.accessConfig.defaultDomain.placeholder')}}
-          </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>{{t 'ldap.accessConfig.groupSearchBase.labelText'}}</label>
+          {{input value=model.groupSearchDomain classNames="form-control" placeholder=(t 'ldap.accessConfig.groupSearchBase.placeholder')}}
+          <p class="help-block">{{t 'ldap.accessConfig.groupSearchBase.helpText'}}</p>
         </div>
-      {{/unless}}
+      </div>
     </div>
   </section>
 
-  <section>
+  <section class="well">
     <h3>{{t 'ldap.customizeSchema.header'}}</h3>
     <hr/>
-    <p class="text-info">{{t 'ldap.customizeSchema.helpText'}}</p>
+    <p>{{t 'ldap.customizeSchema.helpText'}}</p>
     <div class="row">
-      <div class="col span-6">
+      <div class="col-md-6">
         <h4>{{t 'ldap.customizeSchema.users.header'}}</h4>
-        <div class="inline-form">
+        <div class="form-group">
           <label>{{t 'ldap.customizeSchema.users.objectClass.labelText'}}</label>
-          {{input type="text" value=model.userObjectClass classNames="form-control"}}
+          {{input value=model.userObjectClass classNames="form-control"}}
         </div>
-        <div class="inline-form">
+        <div class="form-group">
           <label>{{t 'ldap.customizeSchema.users.login.labelText'}}</label>
-          {{input type="text" value=model.userLoginField classNames="form-control"}}
+          {{input value=model.userLoginField classNames="form-control"}}
         </div>
-        <div class="inline-form">
+        <div class="form-group">
           <label>{{t 'ldap.customizeSchema.users.name.labelText'}}</label>
-          {{input type="text" value=model.userNameField classNames="form-control"}}
+          {{input value=model.userNameField classNames="form-control"}}
         </div>
-        <div class="inline-form">
+        <div class="form-group">
           <label>{{t 'ldap.customizeSchema.users.search.labelText'}}</label>
-          {{input type="text" value=model.userSearchField classNames="form-control"}}
+          {{input value=model.userSearchField classNames="form-control"}}
         </div>
-        <div class="inline-form">
+        <div class="form-group">
           <label>{{t 'ldap.customizeSchema.users.status.labelText'}}</label>
-          {{input type="text" value=model.userEnabledAttribute classNames="form-control"}}
+          {{input value=model.userEnabledAttribute classNames="form-control"}}
         </div>
-        <div class="inline-form">
+        <div class="form-group">
           <label>{{t 'ldap.customizeSchema.users.disabledBitMask.labelText'}}</label>
           {{input-integer value=model.userDisabledBitMask min=1 classNames="form-control"}}
         </div>
-        <div class="inline-form">
+        <div class="form-group">
           <label>{{t 'ldap.customizeSchema.users.userMemberAttribute.labelText'}}</label>
-          {{input type="text" value=model.userMemberAttribute classNames="form-control"}}
+          {{input value=model.userMemberAttribute classNames="form-control"}}
         </div>
       </div>
-      <div class="col span-6">
-        <h3>{{t 'ldap.customizeSchema.groups.header'}}</h3>
-        <div class="inline-form">
+      <div class="col-md-6">
+        <h4>{{t 'ldap.customizeSchema.groups.header'}}</h4>
+        <div class="form-group">
           <label>{{t 'ldap.customizeSchema.groups.objectClass.labelText'}}</label>
-          {{input type="text" value=model.groupObjectClass classNames="form-control"}}
+          {{input value=model.groupObjectClass classNames="form-control"}}
         </div>
-        <div class="inline-form">
+        <div class="form-group">
           <label>{{t 'ldap.customizeSchema.groups.name.labelText'}}</label>
-          {{input type="text" value=model.groupNameField classNames="form-control"}}
+          {{input value=model.groupNameField classNames="form-control"}}
         </div>
-        <div class="inline-form">
+        <div class="form-group">
           <label>{{t 'ldap.customizeSchema.groups.search.labelText'}}</label>
-          {{input type="text" value=model.groupSearchField classNames="form-control"}}
+          {{input value=model.groupSearchField classNames="form-control"}}
         </div>
-        <div class="inline-form">
+        <div class="form-group">
           <label>{{t 'ldap.customizeSchema.groups.groupMemberUser.labelText'}}</label>
-          {{input type="text" value=model.groupMemberUserAttribute classNames="form-control" placeholder=(t 'ldap.customizeSchema.groups.groupMemberUser.placeholder')}}
+          {{input value=model.groupMemberUserAttribute classNames="form-control" placeholder=(t 'ldap.customizeSchema.groups.groupMemberUser.placeholder')}}
         </div>
-        <div class="inline-form">
+        <div class="form-group">
           <label>{{t 'ldap.customizeSchema.groups.groupMemberMapping.labelText'}}</label>
-          {{input type="text" value=model.groupMemberMappingAttribute classNames="form-control"}}
+          {{input value=model.groupMemberMappingAttribute classNames="form-control"}}
         </div>
-        <div class="inline-form">
+        <div class="form-group">
           <label>{{t 'ldap.customizeSchema.groups.groupDN.labelText'}}</label>
-          {{input type="text" value=model.groupDNField classNames="form-control" placeholder=(t 'ldap.customizeSchema.groups.groupDN.placeholder')}}
+          {{input value=model.groupDNField classNames="form-control" placeholder=(t 'ldap.customizeSchema.groups.groupDN.placeholder')}}
         </div>
       </div>
     </div>
   </section>
 
-  <section>
+  <section class="well">
     <h3>{{t 'ldap.testAuth.header'}}</h3>
     <hr/>
-    <p class="text-info">{{t 'ldap.testAuth.helpText' providerName=(t providerName)}}</p>
+    <p class="help-block">{{t 'ldap.testAuth.helpText' providerName=(t providerName)}}</p>
     {{top-errors errors=errors}}
 
     <div class="row">
-      <div class="col span-4">
-        <div class="inline-form">
+      <div class="col-md-4">
+        <div class="form-group">
           <label>{{t 'ldap.testAuth.userName.labelText'}}*</label>
-          {{input type="text" value=username classNames="form-control"}}
+          {{input value=username classNames="form-control"}}
         </div>
       </div>
-      <div class="col span-4">
-        <div class="inline-form">
+      <div class="col-md-4">
+        <div class="form-group">
           <label>{{t 'ldap.testAuth.password.labelText'}}*</label>
           {{input type="password" value=password classNames="form-control"}}
         </div>
       </div>
-      <div class="col span-4">
-        <div class="inline-form">
+      <div class="col-md-4">
+        <div class="form-group">
           <label>&nbsp;</label>
-          <button disabled={{createDisabled}} class="btn bg-primary" style="display: block;" {{action "test"}}>
+          <button disabled={{createDisabled}} class="btn btn-primary" style="display: block;" {{action "test"}}>
             {{#if testing}}
               <i class="icon icon-spinner icon-spin"></i> {{t 'ldap.testAuth.authenticate.post'}}
             {{else}}

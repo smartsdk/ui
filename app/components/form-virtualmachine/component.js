@@ -3,7 +3,7 @@ import Ember from 'ember';
 export default Ember.Component.extend({
   launchConfig : null,
 
-  classNames   : ['pt-10'],
+  classNames   : ['r-pt10'],
 
   init() {
     this._super(...arguments);

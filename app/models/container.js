@@ -31,16 +31,6 @@ var Container = Instance.extend({
   services                   : denormalizeIdArray('serviceIds'),
   primaryService             : Ember.computed.alias('services.firstObject'),
   primaryStack               : Ember.computed.alias('primaryService.stack'),
-  referencedStack            : denormalizeId('stackId'),
-  referencedService          : denormalizeId('serviceId'),
-
-  service: Ember.computed('primaryService','referencedService', function() {
-    return this.get('referencedService') || this.get('primaryService');
-  }),
-
-  stack: Ember.computed('primaryStack','referencedStack', function() {
-    return this.get('referencedStack') || this.get('primaryStack');
-  }),
 
   actions: {
     restart: function() {
@@ -72,7 +62,7 @@ var Container = Instance.extend({
       let proj = this.get('projects.current.id');
       let id = this.get('id');
       Ember.run.later(() => {
-        window.open(`//${window.location.host}/env/${proj}/infra/console?instanceId=${id}&isPopup=true`, '_blank', "toolbars=0,width=900,height=700,left=200,top=200");
+        window.open(`//${window.location.host}/env/${proj}/infra/console?instanceId=${id}&isPopup=true`, '_blank', "toolbars=0,width=717,height=590,left=200,top=200");
       });
     },
 
@@ -99,6 +89,7 @@ var Container = Instance.extend({
     cloneToService: function() {
       this.get('router').transitionTo('service.new', {queryParams: {containerId: this.get('id')}});
     },
+
   },
 
   availableActions: function() {
@@ -109,19 +100,20 @@ var Container = Instance.extend({
     }
 
     var labelKeys = Object.keys(this.get('labels')||{});
-    var isSystem = this.get('isSystem');
+    var isSystem = !!this.get('system') || labelKeys.indexOf(C.LABEL.SYSTEM_TYPE) >= 0;
     var isService = labelKeys.indexOf(C.LABEL.SERVICE_NAME) >= 0;
+    var isVm = this.get('isVm');
     var isK8s = labelKeys.indexOf(C.LABEL.K8S_POD_NAME) >= 0;
 
     var choices = [
-      { label: 'action.restart',    icon: 'icon icon-refresh',      action: 'restart',      enabled: !!a.restart, bulkable: true},
-      { label: 'action.start',      icon: 'icon icon-play',         action: 'start',        enabled: !!a.start, bulkable: true},
-      { label: 'action.stop',       icon: 'icon icon-stop',         action: 'promptStop',   enabled: !!a.stop, altAction: 'stop', bulkable: true},
-      { label: 'action.remove',     icon: 'icon icon-trash',        action: 'promptDelete', enabled: this.get('canDelete'), altAction: 'delete', bulkable: true},
+      { label: 'action.restart',    icon: 'icon icon-refresh',      action: 'restart',      enabled: !!a.restart, bulkable: true, bulkActionName: 'Restart'},
+      { label: 'action.start',      icon: 'icon icon-play',         action: 'start',        enabled: !!a.start, bulkable: true, bulkActionName:  'Start'},
+      { label: 'action.stop',       icon: 'icon icon-stop',         action: 'promptStop',   enabled: !!a.stop, altAction: 'stop', bulkable: true, bulkActionName: 'Stop' },
+      { label: 'action.remove',     icon: 'icon icon-trash',        action: 'promptDelete', enabled: this.get('canDelete'), altAction: 'delete', bulkable: true, bulkActionName: 'Delete' },
       { label: 'action.purge',      icon: '',                       action: 'purge',        enabled: !!a.purge },
       { divider: true },
-      { label: 'action.execute',    icon: '',                       action: 'shell',        enabled: !!a.execute, altAction:'popoutShell'},
-      { label: 'action.console',    icon: '',                       action: 'console',      enabled: !!a.console, altAction:'popoutShellVm' },
+      { label: 'action.execute',    icon: '',                       action: 'shell',        enabled: !!a.execute && !isVm, altAction:'popoutShell'},
+      { label: 'action.console',    icon: '',                       action: 'console',      enabled: !!a.console &&  isVm, altAction:'popoutShellVm' },
       { label: 'action.logs',       icon: '',                       action: 'logs',         enabled: !!a.logs, altAction: 'popoutLogs' },
       { label: 'action.viewInApi',  icon: 'icon icon-external-link',action: 'goToApi',      enabled: true },
       { divider: true },
@@ -130,7 +122,7 @@ var Container = Instance.extend({
     ];
 
     return choices;
-  }.property('actionLinks.{restart,start,stop,restore,purge,execute,logs,update}','canDelete','isSystem'),
+  }.property('actionLinks.{restart,start,stop,restore,purge,execute,logs,update}','systemContainer','canDelete','labels','isVm'),
 
 
   memoryReservationBlurb: Ember.computed('memoryReservation', function() {
@@ -168,6 +160,10 @@ var Container = Instance.extend({
     }
   }.property('state', 'healthState'),
 
+  isVm: function() {
+    return this.get('type').toLowerCase() === 'virtualmachine';
+  }.property('type'),
+
   isOn: function() {
     return ['running','updating-running','migrating','restarting'].indexOf(this.get('state')) >= 0;
   }.property('state'),
@@ -192,11 +188,7 @@ var Container = Instance.extend({
     return ['removed','removing','purging','purged'].indexOf(this.get('state')) === -1;
   }.property('state'),
 
-  isSystem: function() {
-    var labelKeys = Object.keys(this.get('labels')||{});
-    var isSystem = !!this.get('system') || labelKeys.indexOf(C.LABEL.SYSTEM_TYPE) >= 0;
-    return isSystem;
-  }.property('system','labels'),
+  isManaged: Ember.computed.notEmpty('systemContainer'),
 
   displayImage: function() {
     return (this.get('imageUuid')||'').replace(/^docker:/,'');

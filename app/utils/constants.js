@@ -1,4 +1,5 @@
-const KIND_USER = 'user'; const KIND_CATALOG = 'catalog';
+const KIND_USER = 'user';
+const KIND_CATALOG = 'catalog';
 const KIND_SYSTEM = 'system';
 const KIND_SYSTEM_CATALOG = 'system-catalog';
 const KIND_LEGACY_KUBERNETES = 'kubernetes';
@@ -9,14 +10,34 @@ const KIND_INFRA = 'infra';
 const KIND_NOT_ORCHESTRATION = 'cattle';
 
 var C = {
-  AUTH_TYPES: {
-    AdminAuth: 'None',
-    BasicAuth: 'API Key',
-    HeaderAuth: 'HeaderAuth',
-    RegistrationToken: 'Host Registration',
-    TokenAccount: 'TokenAccount',
-    TokenAuth: 'UI Session'
-  },
+  BULK_ACTIONS: [
+    {
+      "label": "action.start",
+      "icon": "icon icon-play",
+      "action": "start",
+      "bulkActionName": "Start",
+    },
+    {
+      "label": "action.stop",
+      "icon": "icon icon-stop",
+      "action": "promptStop",
+      "altAction": "stop",
+      "bulkActionName": "Stop",
+    },
+    {
+      "label": "action.restart",
+      "icon": "icon icon-refresh",
+      "action": "restart",
+      "bulkActionName": "Restart",
+    },
+    {
+      "label": "action.remove",
+      "icon": "icon icon-trash",
+      "action": "promptDelete",
+      "altAction": "delete",
+      "bulkActionName": "Delete",
+    },
+  ],
 
   CAPABILITY: {
     NETWORK_POLICIES: 'network-policy-manager',
@@ -44,7 +65,8 @@ var C = {
     GROUP_SEPARATOR: ':',
     BASE_SEPARATOR: '*',
     ID_SEPARATOR: ':',
-    KIND_ALL: 'containers', KIND_USER: KIND_USER,
+    KIND_ALL: 'all',
+    KIND_USER: KIND_USER,
     KIND_CATALOG: KIND_CATALOG,
     KIND_SYSTEM: KIND_SYSTEM,
     KIND_SYSTEM_CATALOG: KIND_SYSTEM_CATALOG,
@@ -78,14 +100,6 @@ var C = {
     CATALOG_DEFAULT_GROUP: 'library',
   },
 
-  EXT_REFERENCES: {
-    FORUM: 'https://forums.rancher.com',
-    COMPANY: 'http://rancher.com',
-    GITHUB: 'https://github.com/rancher/rancher',
-    DOCS: 'http://docs.rancher.com/rancher',
-    SLACK: 'https://slack.rancher.io',
-  },
-
   GITHUB: {
     DEFAULT_HOSTNAME: 'github.com',
     AUTH_PATH: '/login/oauth/authorize',
@@ -102,11 +116,6 @@ var C = {
     NO_CHALLENGE_VALUE: 'true',
     PROJECT_ID: 'X-Api-Project-Id',
     RANCHER_VERSION: 'X-Rancher-Version',
-  },
-
-  K8S: {
-    BASE: 'api',
-    BASE_VERSION: 'api/v1',
   },
 
   KEY: {
@@ -176,54 +185,36 @@ var C = {
     SIDEKICK: 'io.rancher.sidekicks',
   },
 
-  LANGUAGE: {
-    DEFAULT: 'en-us',
-    FORMAT_RELATIVE_TIMEOUT: 1000,
-    DOCS: ['en'],
-  },
-
-  // CSS map to driver icons
-  MACHINE_DRIVER_IMAGES: {
-    AMAZONEC2: 'amazonec2',
-    AZURE: 'azure',
-    DIGITALOCEAN: 'digitalocean',
-    EXOSCALE: 'exoscale',
-    GENERIC: 'generic',
-    OPENSTACK: 'openstack',
-    PACKET: 'packet',
-    RACKSPACE: 'rackspace',
-    UBIQUITY: 'ubiquity',
-    VMWAREVSPHERE: 'vmwarevsphere',
-    OTHER: 'other',
-    CUSTOM: 'custom',
-    ALIYUNECS: 'aliyunecs',
-  },
-
-  MESOS: {
-    HEALTH: 'health',
-    FRAMEWORKS: 'frameworks',
-    MASTER_SERVICE: 'mesos-master',
-    MASTER_PORT: 5050,
-  },
-
-  MODE: {
-    OSS: 'oss', // Regular community UI
-    CAAS: 'caas', // Container cloud UI
-  },
-
   PREFS: {
     ACCESS_WARNING  : 'accessWarning',
     BODY_BACKGROUND : 'bodyBackground',
     PROJECT_DEFAULT : 'defaultProjectId',
     EXPANDED_STACKS : 'expandedStacks',
     SORT_STACKS_BY  : 'sortStacksBy',
-    HOST_VIEW       : 'hostView',
     THEME           : 'theme',
     TABLE_COUNT     : 'tableCount',
     LANGUAGE        : 'language',
     I_HATE_SPINNERS : 'ihatespinners',
     FEEDBACK        : 'feedback',
     SHOW_SYSTEM     : 'showSystem',
+  },
+
+  LANGUAGE: {
+    DEFAULT: 'en-us',
+    FORMAT_RELATIVE_TIMEOUT: 1000,
+    DOCS: ['en'],
+  },
+
+  TABLES: {
+    DEFAULT_COUNT: 50
+
+  },
+
+  THEME: {
+    AUTO_UPDATE_TIMER : 1800000,
+    START_HOUR        : 7,
+    END_HOUR          : 18,
+    DEFAULT           : 'ui-light',
   },
 
   PROJECT: {
@@ -259,19 +250,24 @@ var C = {
 
   // Ephemeral but same but across all browser tabs
   SESSION: {
-    ACCOUNT_ID     : 'accountId',
     BACK_TO        : 'backTo',
-    CONTAINER_ROUTE: 'containerSubRoute',
+    USER_ID        : 'user',
+    ACCOUNT_ID     : 'accountId',
+    USER_TYPE      : 'userType',
+    PROJECT        : 'projectId',
+    IDENTITY       : 'userIdentity',
+    IDENTITY_TYPE  : 'userType',
     GITHUB_CACHE   : 'githubCache',
     GITHUB_ORGS    : 'orgs',
     GITHUB_TEAMS   : 'teams',
-    IDENTITY       : 'userIdentity',
-    IDENTITY_TYPE  : 'userType',
     LANGUAGE       : 'language',
     LOGIN_LANGUAGE : 'loginLanguage',
-    PROJECT        : 'projectId',
-    USER_ID        : 'user',
-    USER_TYPE      : 'userType',
+  },
+
+  // Ephemeral and unique for each browser tab
+  TABSESSION: {
+    PROJECT: 'projectId',
+    NAMESPACE: 'namespaceId',
   },
 
   SETTING: {
@@ -305,24 +301,7 @@ var C = {
     BALANCER_IMAGE:            'lb$instance$image',
     PROJECT_VERSION:           'account$version',
     FEEDBACK_FORM:             'ui$feedback$form',
-    SHOW_SYSTEM:               'ui$show$system',
-  },
-
-  TABLES: {
-    DEFAULT_COUNT: 50
-  },
-
-  // Ephemeral and unique for each browser tab
-  TABSESSION: {
-    PROJECT: 'projectId',
-    NAMESPACE: 'namespaceId',
-  },
-
-  THEME: {
-    AUTO_UPDATE_TIMER : 1800000,
-    START_HOUR        : 7,
-    END_HOUR          : 18,
-    DEFAULT           : 'ui-light',
+    SHOW_CUSTOM_HOST:          'ui$show$custom$host',
   },
 
   USER: {
@@ -330,6 +309,52 @@ var C = {
     TYPE_ADMIN: 'admin',
     BASIC_BEARER: 'x-api-bearer',
   },
+
+  AUTH_TYPES: {
+    AdminAuth: 'None',
+    BasicAuth: 'API Key',
+    HeaderAuth: 'HeaderAuth',
+    RegistrationToken: 'Host Registration',
+    TokenAccount: 'TokenAccount',
+    TokenAuth: 'UI Session'
+  },
+
+  EXT_REFERENCES: {
+    FORUM: 'https://forums.rancher.com',
+    COMPANY: 'http://rancher.com',
+    GITHUB: 'https://github.com/rancher/rancher',
+    DOCS: 'http://docs.rancher.com/rancher',
+    SLACK: 'https://slack.rancher.io',
+  },
+
+  K8S: {
+    BASE: 'api',
+    BASE_VERSION: 'api/v1',
+  },
+
+  MESOS: {
+    HEALTH: 'health',
+    FRAMEWORKS: 'frameworks',
+    MASTER_SERVICE: 'mesos-master',
+    MASTER_PORT: 5050,
+  },
+
+  // CSS map to driver icons
+  MACHINE_DRIVER_IMAGES: {
+    AMAZONEC2: 'amazonec2',
+    AZURE: 'azure',
+    DIGITALOCEAN: 'digitalocean',
+    EXOSCALE: 'exoscale',
+    GENERIC: 'generic',
+    OPENSTACK: 'openstack',
+    PACKET: 'packet',
+    RACKSPACE: 'rackspace',
+    UBIQUITY: 'ubiquity',
+    VMWAREVSPHERE: 'vmwarevsphere',
+    OTHER: 'other',
+    CUSTOM: 'custom',
+    ALIYUNECS: 'aliyunecs',
+  }
 };
 
 C.TOKEN_TO_SESSION_KEYS = [
@@ -405,7 +430,6 @@ C.SUPPORTED_SCHEMA_INPUTS= [
   'date',
   'enum',
   'float',
-  'host',
   'int',
   'multiline',
   'password',

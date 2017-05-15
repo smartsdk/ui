@@ -1,12 +1,9 @@
-<div>
-  <button class="btn bg-link icon-btn" {{action "addUserLabel"}}>
-  <i class="icon icon-plus text-small"/> 
-  <span>{{t 'formUserLabels.addAction'}}</span>
-  </button>
+<div class="form-control-static">
+  <button class="btn-circle-text" {{action "addUserLabel"}}><i class="icon icon-plus-circle"/> <span>{{t 'formUserLabels.addAction'}}</span></button>
 </div>
 
 {{#if userLabelArray.length}}
-  <table class="table fixed no-lines no-top-padding">
+  <table class="table fixed no-lines no-top-padding tight small">
     <tr class="text-muted hidden-xs hidden-sm">
       <th>{{t 'formUserLabels.key.label'}}</th>
       <th width="30">&nbsp;</th>
@@ -20,7 +17,7 @@
         </td>
 
         <td class="text-center">
-          <p class="input-sm">{{t 'formUserLabels.separator'}}</p>
+          <p class="form-control-static input-sm">{{t 'formUserLabels.separator'}}</p>
         </td>
 
         <td data-title="label">
@@ -28,7 +25,7 @@
         </td>
 
         <td class="text-right">
-          <button class="btn bg-primary btn-sm" {{action "removeLabel" label}}><i class="icon icon-minus"/><span class="sr-only">{{t 'generic.remove'}}</span></button>
+          <button class="btn btn-primary btn-sm" {{action "removeLabel" label}}><i class="icon icon-minus"/><span class="sr-only">{{t 'generic.remove'}}</span></button>
         </td>
       </tr>
     {{/each}}

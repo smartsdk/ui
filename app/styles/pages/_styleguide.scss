@@ -135,47 +135,47 @@
 }
 
 .primaryDark {
-  background-color: $primary-dark;
+  background-color: $primaryDark;
 }
 
 .red {
-  background-color: $error;
+  background-color: $red;
 }
 
 .redDark {
-  background-color: $errorDark;
+  background-color: $redDark;
 }
 
 .redTwo {
-  background-color: $errorTwo;
+  background-color: $redTwo;
 }
 
 .redTwoDark {
-  background-color: $errorTwoDark;
+  background-color: $redTwoDark;
 }
 
 .orange {
-  background-color: mix($warning, $error, 20%);
+  background-color: $orange;
 }
 
 .orangeDark {
-  background-color: mix($warning, $error, 20%)Dark;
+  background-color: $orangeDark;
 }
 
 .yellow {
-  background-color: $warning;
+  background-color: $yellow;
 }
 
 .yellowDark {
-  background-color: darken($warning, 20%);
+  background-color: $yellowDark;
 }
 
 .yellowTwo {
-  background-color: $warningTwo;
+  background-color: $yellowTwo;
 }
 
 .yellowTwoDark {
-  background-color: $warningTwoDark;
+  background-color: $yellowTwoDark;
 }
 
 .green {
@@ -207,47 +207,47 @@
 }
 
 .navyTwoDark {
-  background-color: $secondary;
+  background-color: $navyTwoDark;
 }
 
 .blue {
-  background-color: $primary;
+  background-color: $blue;
 }
 
 .blueDark {
-  background-color: $primary-dark;
+  background-color: $blueDark;
 }
 
 .blueTwo {
-  background-color: $link-color;
+  background-color: $blueTwo;
 }
 
 .blueTwoDark {
-  background-color: $link-colorDark;
+  background-color: $blueTwoDark;
 }
 
 .teal {
-  background-color: $info;
+  background-color: $teal;
 }
 
 .tealDark {
-  background-color: $infoDark;
+  background-color: $tealDark;
 }
 
 .tealTwo {
-  background-color: $infoTwo;
+  background-color: $tealTwo;
 }
 
 .tealTwoDark {
-  background-color: $infoTwoDark;
+  background-color: $tealTwoDark;
 }
 
 .lightTeal {
-  background-color: $info;
+  background-color: $lightTeal;
 }
 
 .lightTealDark {
-  background-color: darken($info, 20%);
+  background-color: $lightTealDark;
 }
 
 .black {
@@ -255,55 +255,55 @@
 }
 
 .blackDark {
-  background-color: darken($black, 20%);
+  background-color: $blackDark;
 }
 
 .darkestGray {
-  background-color: $dark-grey;
+  background-color: $darkestGray;
 }
 
 .darkestGrayDark {
-  background-color: $dark-grey;
+  background-color: $darkestGrayDark;
 }
 
 .darkestGrayTwo {
-  background-color: $dark-greyTwo;
+  background-color: $darkestGrayTwo;
 }
 
 .darkestGrayTwoDark {
-  background-color: $dark-greyTwoDark;
+  background-color: $darkestGrayTwoDark;
 }
 
-.mid-grey {
-  background-color: $mid-grey;
+.midGray {
+  background-color: $midGray;
 }
 
-.mid-greyDark {
-  background-color: $mid-grey;
+.midGrayDark {
+  background-color: $midGrayDark;
 }
 
-.mid-greyTwo {
-  background-color: $mid-greyTwo;
+.midGrayTwo {
+  background-color: $midGrayTwo;
 }
 
-.mid-greyTwoDark {
-  background-color: $mid-greyTwoDark;
+.midGrayTwoDark {
+  background-color: $midGrayTwoDark;
 }
 
-.light-grey {
-  background-color: $light-grey;
+.lightGray {
+  background-color: $lightGray;
 }
 
-.light-greyDark {
-  background-color: $light-grey;
+.lightGrayDark {
+  background-color: $lightGrayDark;
 }
 
-.light-greyTwo {
-  background-color: $light-greyTwo;
+.lightGrayTwo {
+  background-color: $lightGrayTwo;
 }
 
-.light-greyTwoDark {
-  background-color: $light-greyTwoDark;
+.lightGrayTwoDark {
+  background-color: $lightGrayTwoDark;
 }
 
 .colordot {

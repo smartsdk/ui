@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import C from 'ui/utils/constants';
+import Util from 'ui/utils/util';
 
 export default Ember.Component.extend({
   catalog:     Ember.inject.service(),
@@ -7,9 +8,43 @@ export default Ember.Component.extend({
   catalogs:    null,
   ary:         null,
   global:      null,
-  actions:     {
+
+  toRemove: null,
+  old: null,
+
+  kindChoices: [
+    {translationKey: 'catalogSettings.more.kind.native', value: 'native'},
+    {translationKey: 'catalogSettings.more.kind.helm', value: 'helm'},
+  ],
+
+  init() {
+    this._super(...arguments);
+    this.set('toRemove', []);
+    let old = this.get('catalogs').filterBy('environmentId', this.get('project.id')).map((x) => {
+      let y = x.clone();
+      y.uiId = Util.randomStr();
+      return y;
+    });
+    this.set('old', old);
+
+
+    this.setProperties({
+      ary: old.map((x) => x.clone()),
+      global: this.get('catalogs').filterBy('environmentId', 'global').slice(), // this should change to falsey check when josh updates the catalog to remove 'global' from the id
+    });
+  },
+
+  actions: {
     add() {
-      this.get('ary').pushObject(Ember.Object.create({name: '', branch: C.CATALOG.DEFAULT_BRANCH, url: '', toAdd: true}));
+      let obj = Ember.Object.create({
+        name: '',
+        branch: C.CATALOG.DEFAULT_BRANCH,
+        url: '',
+        kind: 'native',
+      });
+
+      this.get('ary').pushObject(obj);
+
       Ember.run.next(() => {
         if ( this.isDestroyed || this.isDestroying ) {
           return;
@@ -18,31 +53,55 @@ export default Ember.Component.extend({
         this.$('INPUT.name').last()[0].focus();
       });
     },
+
     remove(obj) {
-      Ember.set(obj, 'toRemove', true);
+      this.get('ary').removeObject(obj);
+      this.get('toRemove').addObject(obj);
     },
+
     save(cb) {
       if (this.validate()) {
         this.set('errors', []);
-        var newCatalogs = this.get('ary').filterBy('toAdd', true);
-        var catalogsToRemove = this.get('ary').filterBy('toRemove', true);
-        var all = [];
+        let remove = this.get('toRemove');
+        let cur = this.get('ary');
 
-        newCatalogs.forEach((cat) => {
-          all.push(this.addCatalogs(cat));
+        let changes = [];
+
+        // Remove
+        remove.forEach((cat) => {
+          changes.push(this.removeCatalogs(cat));
         });
 
-        catalogsToRemove.forEach((cat) => {
-          all.push(this.removeCatalogs(cat));
+        // Add/update
+        cur.forEach((cat) => {
+          if ( cat.uiId ) {
+            // Update maybe
+            let orig = this.get('old').findBy('uiId', cat.uiId);
+            if ( orig ) {
+              if ( JSON.stringify(orig) === JSON.stringify(cat) ) {
+                // Do nothing, nothing changed
+              } else {
+                // Update
+                changes.push(cat.save());
+              }
+            } else {
+              // This shouldn't happen, but add anyway
+              changes.push(this.addCatalogs(cat));
+            }
+          } else {
+            // Add
+            changes.push(this.addCatalogs(cat));
+          }
         });
 
-        Ember.RSVP.all(all).then(() => {
-          this.set('catalog.componentRequestingRefresh', true);
-          this.set('saving', false);
-          cb(true);
-          Ember.run.later(() => {
-            this.sendAction('cancel');
-          }, 500);
+        Ember.RSVP.allSettled(changes).then(() => {
+          return this.get('catalog').refresh().then(() => {
+            this.set('saving', false);
+            cb(true);
+            Ember.run.later(() => {
+              this.sendAction('cancel');
+            }, 500);
+          });
         }).catch((err) => {
           this.set('errors',err);
           cb(false);
@@ -54,39 +113,36 @@ export default Ember.Component.extend({
       }
     }
   },
-  validate: function() {
+
+  validate() {
     var errors = [];
     var globals = ['all', 'community', 'library']; // these should be removed when these terms are removed from the envid field
-    var newCatalogs = this.get('ary').filterBy('toAdd', true);
+    var ary = this.get('ary');
 
-    if (newCatalogs.length) {
-      newCatalogs.forEach((cat) => {
-        if ( (cat.name||'').trim().length === 0 )
-        {
-          errors.push('A name is required');
-        }
-        if ( (cat.url||'').trim().length === 0 )
-        {
-          errors.push('A url is required');
-        }
-        if (globals.indexOf(cat.name.toLowerCase()) >= 0) {
-          errors.push('Catalog name can not match a gloabl catalog name');
-        }
-      });
-    }
+    ary.forEach((cat) => {
+      if ( (cat.name||'').trim().length === 0 ) {
+        errors.push('A name is required');
+      }
 
-    if ( errors.length )
-    {
+      if ( (cat.url||'').trim().length === 0 ) {
+        errors.push('A url is required');
+      }
+      if (globals.indexOf(cat.name.toLowerCase()) >= 0) {
+
+        errors.push('Catalog name can not match a gloabl catalog name');
+      }
+    });
+
+    if ( errors.length ) {
       this.set('errors',errors.uniq());
       return false;
-    }
-    else
-    {
+    } else {
       this.set('errors', null);
     }
 
     return true;
   },
+
   addCatalogs(catalogs) {
     return this.get('store').request({
       url: `${this.get('app.catalogEndpoint')}/catalogs`,
@@ -97,6 +153,7 @@ export default Ember.Component.extend({
       body: JSON.stringify(catalogs)
     });
   },
+
   removeCatalogs(catalogs) {
     return this.get('store').request({
       url: `${this.get('app.catalogEndpoint')}/catalogs/${catalogs.name}`,
@@ -107,11 +164,4 @@ export default Ember.Component.extend({
       body: JSON.stringify(catalogs)
     });
   },
-  init() {
-    this._super(...arguments);
-    this.setProperties({
-      ary: this.get('catalogs').filterBy('environmentId', this.get('project.id')),
-      global: this.get('catalogs').filterBy('environmentId', 'global') // this should change to falsey check when josh updates the catalog to remove 'global' from the id
-    });
-  }
 });

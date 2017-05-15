@@ -9,7 +9,7 @@
   white-space      : pre-wrap;
   padding-right    : 60px;
   background-color : $pre-bg;
-  color            : $info;
+  color            : $brand-info;
 }
 
 .copy-pre {
@@ -19,10 +19,6 @@
     right    : 0;
     bottom   : 0;
     width    : 50px;
-
-    i {
-      text-align: right;
-    }
   }
 
   button {
@@ -35,7 +31,7 @@
     width                     : 50px;
 
     &:hover {
-      background : $primary-dark;
+      background : $brand-primary-dark;
       color      : white;
     }
   }
@@ -43,7 +39,7 @@
 }
 
 .copy-btn.small {
-  color: $text-muted;
+  @extend .text-muted;
   padding: 0;
 
   &:hover {
@@ -51,7 +47,7 @@
   }
 
   &.btn-success {
-    color: $success;
+    color: $green;
   }
 }
 

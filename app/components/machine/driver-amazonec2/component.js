@@ -405,7 +405,7 @@ export default Ember.Component.extend(Driver, {
 
     var opts = {
       maxHeight: 200,
-      buttonClass: 'btn bg-default',
+      buttonClass: 'btn btn-default',
       buttonWidth: '100%',
 
       templates: {

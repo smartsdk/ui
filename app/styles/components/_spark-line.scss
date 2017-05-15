@@ -8,19 +8,19 @@
   }
 
   .cpu-path {
-    stroke: $success;
+    stroke: $green;
   }
 
   .memory-path {
-    stroke: $primary-dark;
+    stroke: $blueDark;
   }
 
   .network-path {
-    stroke: $warning;
+    stroke: $yellowTwo;
   }
 
   .storage-path {
-    stroke: $info;
+    stroke: $teal;
   }
 
 }

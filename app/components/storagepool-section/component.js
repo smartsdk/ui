@@ -7,25 +7,16 @@ export default Ember.Component.extend(Sortable, {
 
   sortableContent: Ember.computed.alias('model.volumes'),
   sortBy: 'name',
-  headers: [
-    {
-      name:           'state',
-      sort:           ['state','displayName','id'],
-      translationKey: 'generic.state',
-      width:          115,
-    },
-    {
-      name:           'name',
-      sort:           ['displayName','id'],
-      translationKey: 'storagePoolSection.models.table.header.volumeName',
-      width:          350,
-    },
-    {
-      name:           'mounts',
-      translationKey: 'storagePoolSection.models.table.header.mounts',
-      sort:           ['mounts.length:desc', 'displayName','id'],
-    },
-  ],
+  sorts: {
+    state:  ['state','displayName','id'],
+    name:   ['displayName','id'],
+    mounts: ['mounts.length','displayName','id'],
+  },
+
+
+  init: function() {
+    this._super();
+  },
 
   hostsByName: function() {
     return (this.get('model.hosts')||[]).sortBy('displayName');

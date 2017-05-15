@@ -3,7 +3,6 @@ import Ember from 'ember';
 export default Ember.Component.extend({
   editing: null,
   createLabel: 'saveCancel.create',
-  savingLabel: 'saveCancel.saving',
   editLabel: 'saveCancel.edit',
   cancelLabel: 'saveCancel.cancel',
   saveDisabled: false,

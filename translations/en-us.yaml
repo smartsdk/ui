@@ -7,13 +7,10 @@ languageContribute: "Help Translate Rancher"
 generic:
   actions: Actions
   activate: Activate
-  all: All
   any: Any
   as: As
   cancel: Cancel
   closeModal: Close
-  command: Command
-  confirm: Confirm
   created: Created
   default: Default
   description: Description
@@ -25,7 +22,6 @@ generic:
   enabled: Enabled
   expires: Expires
   healthy: Healthy
-  host: Host
   id: ID
   image: Image
   internal: Internal
@@ -37,7 +33,6 @@ generic:
   na: 'n/a'
   name: Name
   none: None
-  noRating: No Rating
   ports: Ports
   remove: Remove
   role: Role
@@ -45,7 +40,6 @@ generic:
   saved: Saved
   saving: Saving
   search: Search
-  select: Select
   state: State
   test: Test
   testing: Testing
@@ -58,13 +52,6 @@ generic:
   noo: No
   yess: Yes
 
-realmNames:
-  all: All
-  usWest: US West
-  usEast: US East
-  asia: Asia
-  euWest: EU West
-  euEast: EU East
 
 ##############################
 # Routes
@@ -105,7 +92,7 @@ apiPage:
   actionButton: Add Environment API Key
   content: |
     Environment API keys are tied to this specific Environment (<code>{displayName}</code>) and can only manipulate resources within there.  Other accounts with access to this Environment can also manage these keys.
-  currentEndpoint: 'Endpoint:'
+  currentEndpoint: 'Endpoint (v2-beta):'
   legacyEndpoint: 'Endpoint (v1):'
   table:
     state: State
@@ -124,7 +111,7 @@ apiPage:
       paragraph1: Account API Keys are tied to your specific account
       paragraph2: "and can create, delete, and manipulate all Environments which you have access to."
     table:
-      noData: There are no keys for this Account yet.
+      noData: "You don't have any Account API keys yet."
 
 auditLogsPage:
   header: Audit Logs
@@ -345,7 +332,7 @@ authPage:
   localAuth:
     header:
       enabled: 'Local Authentication is <b>enabled</b>'
-      disabled: '<p>Local Authentication is not configured</p>'
+      disabled: 'Local Authentication is <b class="text-warning">not configured</b>'
     subtext:
       enabled:
         text: '{appName} is configured to allow access to accounts in its local database.'
@@ -396,14 +383,10 @@ backupTargetsPage:
 
 catalogPage:
   index:
-    header: Catalog
-    refreshBtn: Refresh
+    header: 'Catalog:'
     manage: Manage
     search:
-      label: Search
       placeholder: Search...
-    filters:
-      label: Catalog Filter
     category: "Category:"
     certified:
       rancher:
@@ -463,19 +446,31 @@ certificatesPage:
 
 containersPage:
   table:
+    ipAddress: IP Address
     primaryHost: Primary Host
     primaryHostUnknown: Unknown
+    image: Image
     stats: Stats
     sparkPrefixCpu: "CPU: "
     sparkPrefixMemory: "Memory: "
     sparkPrefixNetwork: "Network: "
     sparkPrefixStorage: "Storage: "
+    command: Command
     noCommand: None
-    noData: There are no containers to show.
-    noMatch: No containers match the current search.
   index:
     header: Containers
     linkTo: Add Container
+    table:
+      header:
+        state: State
+        name: Name
+        ip: IP Address
+        host: Host
+        image: Image
+        command: Command
+      body:
+        noData: You do not have any containers yet
+        noMatch: No containers match the current search
   new:
     form:
       name:
@@ -483,7 +478,7 @@ containersPage:
       description:
         placeholder: e.g. My Application
   containerPage:
-    header: 'Container'
+    header: 'Container:'
     subtext:
       on: on
       in: in
@@ -494,6 +489,7 @@ containersPage:
       ip: 'Container IP:'
       docker: 'Docker ID:'
       image: 'Image:'
+      command: 'Command:'
       entryPoint: 'Entry Point:'
       description: 'Description:'
       stack: 'Stack/Service:'
@@ -538,38 +534,8 @@ containerSubpod:
   childContainers: Containers
   childSidekicks: Sidekicks
 
-dnsPage:
-  table:
-    target: Target
-
 dockerCLI:
   header: Swarm CLI
-
-editDns:
-  title:
-    new: Add DNS Record
-    edit: Edit DNS Record
-  name:
-    placeholder: e.g. myapp
-  description:
-    placeholder: e.g. Current version of MyApp
-  selectorContainer:
-    label: Container Selector
-    placeholder: e.g. mylabel=somevalue
-  healthCheckNote: "The health check will only be used if the external entry is used as the target of a load balancer."
-  mode:
-    label: "Resolves To"
-    dnsservice: One or more other services
-    service: The set of containers which match a selector
-    externalip: One or more external IP Addresses
-    externalhostname: An external hostname
-  targetIp:
-    label: Target IP Addresses
-    add: Add Target IP Address
-  hostname:
-    label: Target Hostname
-    placeholder: e.g. foobar.com
-
 
 # If you change translations here also change the translation in app/utils/constants.js under the FALLBACK_TRANSLATIONS key
 # those are present incase we have an error in the app and can not load the translations file
@@ -594,7 +560,8 @@ haPage:
 
 helpPage:
   header: Helpful links & Information
-  banner: 'Latest Release {released}:'
+  banner: Announcements
+  releaseText: "Released:"
   environment:
     header: What is an environment?
     content: |
@@ -663,62 +630,17 @@ helpPage:
     content: |
       At Rancher Labs we provide commercial, enterprise-grade support for {appName}, including an available 24x7 support team, and priority bug fixes.  In addition we provide implementation, integration and consulting services for organizations looking to implement and scale {appName}.  For more information on any of these services, please email our sales team: <a href="mailto:sales@rancher.com">sales@rancher.com</a>
 
-
-
 hostsPage:
-  cloudHostsPage:
-    header: Add Host
-    addPage:
-      header: Add {hostName}
-      memStUnit: GB
-    tabs:
-      fav: Favorites
-      prov: Providers
-      browse: Browse
-    browsePage:
-      table:
-        provider: Provider
-        instance: Type
-        zone: Zone
-        memory: RAM
-        storage: Storage
-        transfer: Transfer
-        cpu: CPU
-        disk: Disk
-        price: "$/mo"
-        help: "<sup>&#10746;</sup>: Plus additional variable metered resource usage"
-        classic: "Add Classic Host"
-      sorts:
-        realm:
-          label: 'Region'
-        mem:
-          label: 'Min Memory'
-          unit: GB
-        storage:
-          label: 'Min Storage'
-          unit: GB
-        cost:
-          label: 'Max Cost'
-          preUnit: '$'
-          unit: '/month'
   addContainer: Add Container
   index:
     header: Hosts
     addHost: Add Host
     tooltip:
       listView: List
-      iconView: State Icons
       groupedView: Grouped Stacks & Sidekicks
     columns:
       emptyMessage: No hosts or containers yet.
-    table:
-      memory: RAM
-      docker: Docker
-      instanceCount: Container Count
-      instanceState: Container States
-      instanceStateWithIcon: States
-      noData: You do not have any hosts yet
-      noMatch: No hosts match the current search
+    showSystem: Show System
   new:
     header:
       linkTo: "Hosts: "
@@ -729,9 +651,7 @@ hostsPage:
         placeholder: e.g. host01
   hostPage:
     header:
-      singleBanner: Viewing a single Host
-      backLink: Back to all hosts
-      title: 'Host: {name}'
+      linkTo: 'Host:'
     addContainer:
       linkTo: Add Container
     infoMultiStats:
@@ -803,9 +723,12 @@ k8sTab:
         Put this into <code>~/.kube/config</code>:
       downloadText: |
         Then <a href="{downloadUrl}" target="_blank">download</a> (if needed) and run <code>kubectl</code>
+    shell:
+      helpText: |
+        Or use this handy shell to directly execute <code>kubectl</code> commands:
 
 loginPage:
-  greeting: "Howdy!<br><span>Welcome to {appName}</span>"
+  greeting: "Howdy!<br>Welcome to {appName}"
   githubMessage: "{appName} uses GitHub to manage accounts and teams.  Click the button below to log in and give us read-only access to your basic GitHub account information."
   shibbolethMessage: "{appName} uses Shibboleth to manage accounts.  Click the button below to log in to the configured Shibboleth IDP."
   shibbolethError:
@@ -934,7 +857,7 @@ secretsPage:
     noMatch: No Secrets match the current search
 
 servicePage:
-  header: 'Service'
+  header: 'Service:'
   multistat:
     type: 'Type:'
     fqdn: 'FQDN:'
@@ -959,6 +882,7 @@ servicePage:
     table:
       header:
         ipAddress: IP Address
+        host: Host
         image: Image
         stats: Stats
       body:
@@ -975,6 +899,12 @@ servicePage:
         placeholder: e.g. myapp
       description:
         placeholder: e.g. My application
+  newAlias:
+    form:
+      name:
+        placeholder: e.g. myapp
+      description:
+        placeholder: e.g. Current version of MyApp
   newBalancer:
     upgradeImage: "The balancer software image will be upgraded from <code>{from}</code> to <code>{to}</code>."
     form:
@@ -1000,10 +930,10 @@ servicePage:
       body:
         noData: There have been no log events yet.
   type:
-    service: Scaling Group
-    selectorservice: Selector
+    service: Service
+    scalinggroup: Scaling Group
     loadbalancerservice: Load Balancer
-    dnsservice: Alias
+    dnsservice: Service Alias
     externalservice: External
     kubernetesservice: K8s Service
     composeservice: Compose Service
@@ -1013,55 +943,40 @@ servicePage:
 settingsPage:
   header: Settings
 
-signupPage:
-  header: Signup for Rancher Container Cloud
-  form:
-    button: Register
-    labels:
-      loginUsername: Name*
-      email: Email*
-      cc: Credit Card Info
-      pw: Password*
-  emailSuccess:
-    header: Welcome to Container Cloud
-    confirm:
-      subtext: Confirm your email by clicking the verification link we just sent to your inbox.
-      resend: Resend Email
-
 stacksPage:
   header:
-    addContainer: Add Service
-    addBalancer: Add Balancer
-    addRecord: Add Record
-    importCompose: Import compose.yml
-  table:
-    standalone: Standalone
-    endpoints: Endpoints
-    instanceCount: Container Count
-    instanceState: Container States
-    instanceStateWithIcon: States
+    all: All Stacks
+    user: User Stacks
+    custom: '{name} Stacks'
+    tags: '"{tags}" Stacks'
+    infra: Infrastructure Stacks
+  actionButton: Add Stack
+  catalogButton: Add from Catalog
+  sort:
+    label: Sort By
+    state: State
+    name: Name
   tags:
     all: All Tags
     one: 'Tag: {name}'
   noInfra: You do not currently have any Infrastructure Stacks
   noMatch: No Stacks match the selected tag
-
-newStack:
-  header: Import Compose.yml
-  name:
-    placeholder: e.g. myapp
-  description:
-    placeholder: e.g. MyApp Stack
-  dockerCompose:
-    label: "compose.yml"
-    placeholder: Contents of compose.yml
-  rancherCompose:
-    label: "rancher-compose.yml"
-    placeholder: Contents of rancher-compose.yml
-  startOnCreate:
-    label: Create Behavior
-    off: Create but do not start/activarte resources
-    on: Create and start/activate resources
+  new:
+    header: Add Stack
+    composeLabel: "Optional: Import Compose"
+    form:
+      name:
+        placeholder: e.g. myapp
+      description:
+        placeholder: e.g. MyApp Stack
+      dockerCompose:
+        label: "Optional: docker-compose.yml"
+        placeholder: Contents of docker-compose.yml
+      rancherCompose:
+        label: "Optional: rancher-compose.yml"
+        placeholder: Contents of rancher-compose.yml
+      startOnCreate:
+        label: Start services after creating
 
 storagePoolsPage:
   header: Storage Drivers
@@ -1120,28 +1035,6 @@ swarmPage:
       body:
         noData: You do not have any Services yet.
 
-userSettingsPage:
-  header: Preferences
-  theme: Theme
-  themeAuto: Auto will transition to dark from 6pm-6am
-  generalInfo:
-    header: My Account
-    form:
-      name:
-        label: Name
-        placeholder: John Smith
-        help: "(To change your email, contact support)"
-        lastChanged: "Your password was last changed on: <\br> {date}"
-      username:
-        label: Username/Email
-        placeholder: johnsmith@example.com
-      password:
-        label: Password
-        text: Change Password
-
-
-
-
 processesPage:
   header: Processes
   tab:
@@ -1178,28 +1071,6 @@ processesPage:
       runAfter: Run After
     noData: 'No processes are currently {which}'
     noMatch: No processes match the current search
-
-verifyPage:
-  header: "You've successfully verified your email!"
-  subtext: We need a few more pieces of information before we can finalize your account.
-  form:
-    name: Name
-    email: Email
-    password: Password*
-    submit: Finish
-  account:
-    header: Account Created
-    subtext: Click the link below to be to taken to the login page.
-    linkText: Login
-
-verifyResetPasswordPage:
-  header: Reset Password
-  button: Update password
-  success:
-    header: Password Reset!
-    subtext: Click the link below to be to taken to the login page.
-    linkText: Login
-
 
 virtualMachinePage:
   header: 'Virtual Machine:'
@@ -1343,10 +1214,14 @@ ldap:
       labelText: Service Account Username
     servicePassword:
       labelText: Service Account Password
-    searchBase:
-      helpText: "Only users and groups below the base will be used."
-      labelText: Search Base
-      placeholder: "e.g. dc=mycompany,dc=com"
+    userSearchBase:
+      labelText: User Search Base
+      placeholder: "e.g. ou=Users,dc=mycompany,dc=com"
+      helpText: "Only users below this base will be used."
+    groupSearchBase:
+      labelText: Group Search Base
+      placeholder: "e.g. ou=Groups,dc=mycompany,dc=com"
+      helpText: "If set, groups will be searched for only under this base instead of under the User Search Base."
     defaultDomain:
       helpText: "This domain will be used if a user logs in without specifing one."
       labelText: Default Login Domain
@@ -1403,44 +1278,30 @@ servicePartial:
     inactive:
       start: Start
 
+serviceInfoPartial:
+  info:
+    label: Info
+    linkTo: View Details
+  image: 'Image:'
+  entryPoint: 'Entrypoint:'
+  command: 'Command:'
+  description: 'Description:'
+  containers: Containers
+  scale: Scale
+  global: Global
+  noContainers: No Containers
+  ports: Ports
+  noPublicPorts: No Public Ports
+  links: Links
+  noLinks: No Links
+  fqdn: 'FQDN:'
+
 ##############################
 # Components
 ##############################
 advancedSection:
   hrText: Advanced Options
 
-addHostTemplate:
-  add:
-    header: Add New Host Key
-  choose:
-    label: Template Keys*
-    add: Add a new key
-    prompt: Select A Template Key
-
-billingInfo:
-  header: Billing Info
-  addNew: Add Payment Method
-  card: "{brand}: ...{last}"
-  noSub: You do not have an active description
-  table:
-    title:
-      cardType: "Brand: {brand}"
-      last4: "Last Four: {last}"
-      exp: "Exp Date: {exp}"
-      name: "Name On Card: {name}"
-      actions: Actions
-
-
-
-caasLogin:
-  resetHeader: Reset Password
-  new: Create Account
-  reset: Reset Password
-  resetSuccess: Success! Check your email for a link to change your password.
-  error: There was an error retrieving your email. Ensure your email is correct and try again.
-  login: Login Page
-  form:
-    email: Email
 
 catalogSettings:
   header: Catalog
@@ -1469,10 +1330,13 @@ catalogSettings:
     url:
       label: URL
       placeholder: 'e.g. https://github.com/mycompany/mycatalog.git'
+    kind:
+      label: Kind
+      native: Native
+      helm: Helm
     branch:
       label: Branch
       placeholder: 'e.g. master'
-
 
 confirmDelete:
   title: 'Are you sure you want to delete'
@@ -1548,6 +1412,9 @@ editAccount:
       label: Confirm Password
     identity:
       label: Identity
+
+editAliasService:
+  title: Edit Service Alias
 
 editApiKey:
   title:
@@ -1676,19 +1543,16 @@ editStack:
     placeholder: e.g. frontend, production
     help: Comma-separated list of tags.  The Stacks list can be filtered by individual tags.
 
-environtmentCatalogs:
-  header: Catalog
-  subtext: You can define your own custom catalog sources here. Catalogs added here will only be availabel to the environemnt in which they were added. Each one needs a unique name and a URL that <code>git clone</code> can handle (see <a href="https://git-scm.com/docs/git-clone#_git_urls_a_id_urls_a" target="_blank">docs</a> for more info).
+envCatalog:
+  header: Manage Catalogs
+  subtext: You can define your own custom catalog sources here, which will be available only to users of this environment.  Global catalogs are available to all enviornments and can only be modified in Admin Settings by an administrator.  Each catalog needs a unique name and a URL that <code>git clone</code> can handle (see <a href="https://git-scm.com/docs/git-clone#_git_urls_a_id_urls_a" target="_blank">docs</a> for more info).
   addActionLabel: Add Catalog
-  global: Global Catalogs
-  globalNote: "You have access to the following global catalogs but they can only be changed by an admin."
-
 
 stackHeader:
   backLink: "Stack:"
   outputs: Outputs
   add:
-    service: Add Scaling Group
+    service: Add Service
     balancer: Add Load Balancer
     external: Add External Service
     alias: Add Service Alias
@@ -1701,7 +1565,7 @@ formatIp:
 formBalancerRules:
   label: Port Rules
   noRules: No Rules
-  addServiceLabel: Add Scaling Group Rule
+  addServiceLabel: Add Service Rule
   addSelectorLabel: Add Selector Rule
   target: Target
   access:
@@ -1850,7 +1714,7 @@ formEngineOpts:
     valuePlaceholder: e.g. https://my-mirror.example.com:5000
 
 formHealthCheck:
-  label: Health Check
+  label: Type
   checkType:
     none: None
     tcp: TCP Connection Opens
@@ -1910,9 +1774,14 @@ formKeyValue:
   protip: 'ProTip: Paste one or more lines of key=value pairs into any key field for easy bulk entry.'
 
 formImage:
-  label: Docker Image
+  label: Select Image
+  vm:
+    placeholder: e.g. rancher/vm-ubuntu
+    dropdownLabel: "{appName} Images"
   container:
-    placeholder: "e.g. ubuntu:xenial"
+    placeholder: "e.g. ubuntu:trusty"
+  pullImage:
+    label: Always pull image before creating
 
 formNameDescription:
   name:
@@ -1921,7 +1790,6 @@ formNameDescription:
   description:
     label: Description
     placeholder: Description
-    expand: Add a Description
 
 formNetwork:
   links:
@@ -1973,7 +1841,7 @@ formNetwork:
 formPorts:
   addAction: Port Map
   bindAddress:
-    label: Public Host IP
+    label: Public Host IP (Optional)
     placeholder: "e.g. 1.2.3.4; Default: any"
   public:
     label: Public Host Port
@@ -1993,11 +1861,22 @@ formPorts:
 
 formScale:
   label: Scale
-  showAdvanced: Other scaling options
-  mode:
-    container: "{scale, plural, =1 {Just create a container} other {Create # separate containers}}"
-    service: "Create a service with scale of {scale}"
-    global: "Create a global service with {scale, plural, =1 {# container} other {# containers}} per host"
+  global:
+    vm: Always run one instance of this virtual machine on every host
+    container: Always run one instance of this container on every host
+  regular:
+    vm: |
+      Run {scale, plural,
+        =0 {no virtual machines}
+        =1 {1 virtual machine}
+        other {# virtual machines}
+      }
+    container: |
+      Run {scale, plural,
+        =0 {no containers}
+        =1 {1 container}
+        other {# containers}
+      }
 
 formScheduling:
   canRequestHost:
@@ -2141,9 +2020,15 @@ formStickiness:
     sticky: e.g. sticky
     domain: e.g. mydomain.com
 
+formTarget:
+  target: Target
+  pointAddress: Point to IP Address(es)
+  pointHostname: Point to a Hostname
+  addTarget: Add Target IP
+
 formTargets:
   title: Targets
-  addAction: Add Target
+  addAction: Add Service
   hostname:
     label: Request Host Header
     placeholder: e.g. svc.com
@@ -2411,6 +2296,21 @@ k8s:
     selectors: Selectors
     noData: No Services
 
+lbAddtlInfo:
+  info: Info
+  viewDetails: View Details
+  defaultCertificate: Default Certificate
+  alternateCertificate: Alternate Certificate
+  description: 'Description: '
+  containers: Containers
+  noContainers: No Containers
+  scale: Scale
+  global: Global
+  ports: Ports
+  noPorts: No public host ports
+  targets: Targets
+  to: to
+
 labelsSection:
   kind: Kind
   key: Key
@@ -2425,7 +2325,6 @@ loginGithub:
 
 loginUserPass:
   userLabel: Username
-  caasLabel: Email
   userPlaceholder: e.g. jsmith
   loginLabel: Log In
   loggingInLabel: Logging In...
@@ -2835,59 +2734,6 @@ modalAboutComponent:
   machineService: Machine Service
   close: Close
 
-modalAddPayment:
-  header: Add New Payment Method
-  save: Save
-  errors:
-    cc: Invalid credit card number
-    exp: Invalid Expiry
-    cvc: Invalid CVC number
-    street: A street is required.
-    city: A city is required.
-    state: A state is required.
-    zip: A zipcode is required.
-  form:
-    currency:
-      label: Select your currency
-    cc:
-      label: Credit Card Number
-      placeholder: '•••• •••• •••• ••••'
-    default:
-      label: Default Card
-    name:
-      label: Name On Credit Card
-      placeholder: 'John Smith'
-    exp:
-      label: Expiration
-      placeholder: '••/••'
-    cvc:
-      label: CVC
-      placeholder: '•••'
-    address:
-      addressLine1:
-        label: Address
-        placeholder: 742 Evergreen Terrace
-      addressLine2:
-        label: Address (cont)
-        placeholder: Apt. 123
-      city:
-        label: City
-        placeholder: Springfield
-      state:
-        label: State
-        placeholder: OR
-      zip:
-        label: Zip Code
-        placeholder: '99999'
-      country:
-        label: Country
-        placeholder: United States
-  currencies:
-    yuan: "Chinese Yuan (¥)"
-    euro: "Euro (€)"
-    dollar: "US Dollar ($)"
-
-
 modalAuditlogInfo:
   header: Additional Log Info
   request: "Request Object:"
@@ -2924,12 +2770,6 @@ modalEditBackup:
   backupTarget: Backup Target
   backupTargetPlaceholder: 'Select a Backup target...'
 
-modalConfirmRemovePayment:
-  header: 'Confirm Payment Removal'
-  title: 'Are you sure you want to delete'
-  card: 'Card ending in {card}'
-  note: 'This will also cancel your Cloud subscription'
-
 modalEditDriver:
   header:
     create: Add Machine Driver
@@ -2951,7 +2791,6 @@ modalEditSetting:
     label: Name
   value:
     label: Value
-    prompt: Select a Value...
   reset:
     label: Reset to Default
 
@@ -2969,7 +2808,7 @@ modalHostEvacuate:
   header: "Are you sure you want to evacuate"
   helpText: "This will deactivate the host(s) and delete all non-infrastructure containers running on it."
   protip: "ProTip: Hold the {key} key while clicking stop to bypass this confirmation."
-  button: Evacutate
+  button: Evacuate
 
 modalProcessError:
   header: Exception Info
@@ -2991,7 +2830,7 @@ modalWelcome:
   closeModal: Got It
 
 newAliasService:
-  header: Add Alias
+  header: Add Service Alias
 
 newBalancer:
   header:
@@ -3051,10 +2890,20 @@ newCatalog:
 newContainer:
   add:
     container: Add Container
-    scalingGroup: Add Scaling Group
+    vm: Add Virtual Machine
+    service: |
+      Add {numServices, plural,
+        =1 {Service}
+        other {Services}
+      }
   upgrade:
     container: Upgrade Container
-    scalingGroup: Upgrade Scaling Group
+    vm: Upgrade Virtual Machine
+    service: |
+      Upgrade {numServices, plural,
+        =1 {Service}
+        other {# Services}
+      }
   tabs:
     disks: Disks
     userData: User Data
@@ -3072,9 +2921,6 @@ newContainer:
   saveNew: Create
   removeSidekick: Remove this Sidekick
   name:
-    label:
-      container: Container Name
-      service: Service Name
     placeholder: e.g. myapp
   description:
     placeholder: e.g. My Application
@@ -3083,11 +2929,9 @@ newContainer:
   addSidekickContainer: Add Sidekick Container
   addSidekickVm: Add Sidekick VM
 
-newPassword:
-  placeholder: New Password
-  password: New Password
-  confirmPassword: Confirm Password
-  passwordNoMatch: Passwords do not match
+newExternalService:
+  header: Add External Service
+  alert: "Note: This will only be used if the external service is a target of a load balancer."
 
 newReceiver:
   title:
@@ -3148,34 +2992,26 @@ newSecret:
 
 pageFooter:
   notARelease: (Not a Release)
-  help: 'Help & Docs'
+  help: Help
+  documentation: Documentation
   faq: FAQs
   issues: File an Issue
   forums: Forums
   slack: Slack
   download:
     link: Download CLI
-    mac: macOS
+    headerCli: Rancher CLI (beta)
+    headerCompose: Rancher Compose
+    mac: Mac OS X
     windows: Windows
     linux: Linux
-  showSystem: Show System
 
 pagination:
-  generic: |
+  multi: |
     {pages, plural,
-    =0 {No Items}
-    =1 {{count} {count, plural, =1 {Item} other {Items}}}
-    other {{from} - {to} of {count} Items}}
-  host: |
-    {pages, plural,
-    =0 {No Hosts}
-    =1 {{count} {count, plural, =1 {Host} other {Hosts}}}
-    other {{from} - {to} of {count} Hosts}}
-  container: |
-    {pages, plural,
-    =0 {No Containers}
-    =1 {{count} {count, plural, =1 {Container} other {Containers}}}
-    other {{from} - {to} of {count} Containers}}
+    =0 {0 Items}
+    =1 {{count} {count, select, =1 {Item} other {Items}}}
+    other {{from} - {to} of {count}}}
 
 pageHeaderEnvironment:
   namespace: Namespace
@@ -3227,8 +3063,6 @@ schema:
     prompt: Choose a Certificate...
   inputEnum:
     option: Choose an option...
-  inputHost:
-    label: Select Host
   inputService:
     prompt: Choose a Service...
   inputSecret:
@@ -3255,6 +3089,16 @@ serviceLink:
       sameStack: "{service}"
       differentStack: "{stack}/{service}"
 
+sidekickAddtlInfo:
+  info: Info
+  image: Image
+  entryPoint: Entrypoint
+  command: Command
+  containers: Containers
+  noContainers: No Containers
+  labels: Labels
+  noLabels: No Labels
+
 siteAccess:
   header: Site Access
   helpText: "Configure who should be allowed to log in and use {appName}."
@@ -3270,13 +3114,46 @@ siteAccess:
 snapshotTimeline:
   noData: No Snapshot Data
 
+stackSection:
+  outputs: Outputs
+  description: Description
+  none: No Services
+  tags: Tags
+  container: |
+    {numContainers, plural,
+      =1 {Container}
+      other {Containers}
+    }
+  service: |
+    {numServices, plural,
+      =1 {Service}
+      other {Services}
+    }
+  sidekick: |
+    {numSidekicks, plural,
+      =1 {+ 1 Sidekick}
+      other {+ # Sidekicks}
+    }
+  add:
+    service: Add Service
+    loadBalancer: Add Load Balancer
+    serviceAlias: Add Service Alias
+    externalService: Add External Service
+    virtualMachine: Add Virtual Machine
+  table:
+    dataTitle:
+      state: State
+      serviceName: Service Name
+      kind: Kind
+      details: Details
+      containers: Containers
+      actions: Actions
+  upgradeImage: Upgrade Container Image
+
+
 snapshotSection:
   none: Not backed up
   multiple: 'Multiple: {latestDate}'
-
-stackRow:
-  label: "Stack: {name}"
-  standalone: Standalone
 
 storagePoolSection:
   outputs: Outputs
@@ -3319,9 +3196,6 @@ swarmTab:
     dashboard:
       content: Portainer is a lightweight management UI which allows you to easily manage your Docker swarm cluster
       button: Portainer UI
-
-tableCountSelect:
-  header: Table Rows per Page
 
 telemetryOpt:
   header: Statistics
@@ -3379,7 +3253,6 @@ viewEditProject:
     default: Everything Else
     allow: Allow
     deny: Deny
-
   header: "Environment:"
   description: Description
   helpBlock: |
@@ -3473,35 +3346,26 @@ nav:
     tab: Mesos
     web: Overview
     system: Infrastructure
-  containers:
-    tab: Containers
-    systemTab: System
-    balancers: Load Balancers
-    containers: Containers
-    scalingGroups: Scaling Groups
-    dns: DNS
-    volumes: Volumes
-    addContainer: Add Container
-    addScalingGroup: Add Scaling Group
-    addBalancer: Add Balancer
-    addDns: Add Record
-    groupNone: Flat List
-    groupStack: Group by Stack
-    importCompose: Import compose.yml
-  hosts:
-    tab: Hosts
-  apps:
-    tab: Apps
-    apps: Applications
-    launch: Launch from Catalog
+  cattle:
+    tab: Stacks
+    all: All
+    user: User
+    system: Infrastructure
+  catalog:
+    tab: Catalog
+    all: All
+    library: Library
+    community: Community
   infra:
-    tab: Resources
+    tab: Infrastructure
+    hosts: Hosts
+    containers: Containers
+    vms: Virtual Machines
     storagePage: Storage
+    backupTarget: Backup Targets
     certificates: Certificates
     registries: Registries
     secrets: Secrets
-    keys: API Keys
-    hooks: Webhooks
   admin:
     tab: Admin
     audit: Audit Log
@@ -3511,6 +3375,10 @@ nav:
     machine: Machine Drivers
     settings: Settings
     ha: High Availability
+  api:
+    tab: API
+    keys: Keys
+    hooks: Webhooks
   user:
     label: "User Menu: {username}"
     logout: Log Out
@@ -3520,8 +3388,14 @@ nav:
     themeLight: Light
     themeAuto: Auto
     themeDark: Dark
-  userSettings:
-    link: "User Settings"
+  noHosts:
+    prefix: "Before adding your first service or launching a container, you'll need to add a Linux host with a <a href=\"{docsBase}/hosts/#supported-docker-versions\" target=\"_blank\">supported version</a> of Docker.  "
+    link: "Add a host"
+    suffix: ""
+  noHostsWindows:
+    prefix: "Before adding your first service or launching a container, you'll need to add a Windows host.  "
+    link: "Add a host"
+    suffix: ""
 
 ##############################
 # Resource Actions

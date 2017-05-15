@@ -35,9 +35,8 @@ export default Ember.Service.extend({
   },
 
   stateMatches: function(actual) {
-    return actual;
-    //var expected = this.get('session.githubState');
-    //return actual && expected === actual;
+    var expected = this.get('session.githubState');
+    return actual && expected === actual;
   },
 
   getAuthorizeUrl: function(test) {

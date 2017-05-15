@@ -1,13 +1,9 @@
-@mixin tooltip-triangle {
+.tooltip-triangle {
   content    : '';
   background : transparent;
   width      : 0;
   height     : 0;
   position   : absolute;
-}
-
-.tooltip-triangle {
-  @include tooltip-triangle
 }
 .tooltip-content {
   display : none !important;
@@ -20,9 +16,9 @@
 .container-tooltip {
   display    : inline-block;
   position   : fixed;
-  background : $secondary;
+  background : $primary;
   color      : white;
-  // min-height : 20px;
+  min-height : 20px;
   max-width  : 265px;
   z-index    : 1000;
   padding    : 3px;
@@ -35,45 +31,45 @@
   }
 
   &.top::after {
-    @include tooltip-triangle;
+    @extend .tooltip-triangle;
     border-left  : 5px solid transparent;
     border-right : 5px solid transparent;
-    border-top   : 5px solid $secondary;
+    border-top   : 5px solid $primary;
     bottom       : -5px;
     left         : calc(50% - 5px);
   }
   &.bottom::after {
-    @include tooltip-triangle;
+    @extend .tooltip-triangle;
     border-left   : 5px solid transparent;
     border-right  : 5px solid transparent;
-    border-bottom : 5px solid $secondary;
+    border-bottom : 5px solid $primary;
     top           : -5px;;
     left          : calc(50% - 5px);
   }
   &.left::after {
-    @include tooltip-triangle;
+    @extend .tooltip-triangle;
     border-top    : 5px solid transparent;
     border-bottom : 5px solid transparent;
-    border-right  : 5px solid $secondary;
+    border-right  : 5px solid $primary;
     left          : -5px;
     top           : calc(50% - 5px);
   }
   &.right::after {
-    @include tooltip-triangle;
+    @extend .tooltip-triangle;
     border-top    : 5px solid transparent;
     border-bottom : 5px solid transparent;
-    border-left   : 5px solid $secondary;
+    border-left   : 5px solid $primary;
     right         : -5px;
     top           : calc(50% - 5px);
   }
 
   .more-actions {
-    border     : 1px solid $primary-dark;
+    border     : 1px solid $primaryDark;
     color      : white;
-    background : $primary-dark;
+    background : $primaryDark;
 
     &::hover {
-      background: lighten($primary-dark, 15%);
+      background: lighten($primaryDark, 15%);
     }
 
     .icon-chevron-down {
@@ -94,12 +90,12 @@
     }
 
     .dismiss {
-      @include hand;
+      @extend .hand;
       height     : 100%;
-      background : $primary-dark;
+      background : $primaryDark;
       margin     : -5px;
       padding    : 6px;
-      border     : 1px solid $primary-dark;
+      border     : 1px solid $primaryDark;
       float      : right;
 
       & .icon-close {
@@ -110,7 +106,6 @@
 
 
   .resource-actions {
-    display: inline-block;
     position : absolute;
     top      : 0px;
     right    : 0px;
@@ -145,7 +140,7 @@
     font-size     : 12px;
 
     .col {
-      @include clip;
+      @extend .clip;
       display : inline-block;
       width   : 50%;
       float   : left;
@@ -155,28 +150,28 @@
 }
 
 .tooltip-warning-container {
-  background : $info;
+  background : $lightTeal;
   color      : white;
   cursor: pointer;
 
   &.top::after {
-    border-top   : 5px solid $info;
+    border-top   : 5px solid $lightTeal;
   }
   &.bottom::after {
-    border-bottom : 5px solid $info;
+    border-bottom : 5px solid $lightTeal;
   }
   &.left::after {
-    border-right  : 5px solid $info;
+    border-right  : 5px solid $lightTeal;
   }
   &.right::after {
-    border-left   : 5px solid $info;
+    border-left   : 5px solid $lightTeal;
   }
 
   .tooltip-content-inner {
 
   }
   .dismiss {
-    background : darken($info, 20%);
+    background : $lightTealDark;
     margin: -3px -3px -3px 10px;
     padding: 5px;
 
@@ -186,47 +181,20 @@
   }
 }
 
-//from lacsso
-.tooltip {
-  @extend .bg-default;
-  padding: 10px;
-  position: relative;
-
-  &:after {
-    content: "";
-    position: absolute;
-    bottom: -20px;
-    left: calc(50% - 10px);
-    border-style: solid;
-    border-color: transparent;
-    border-top-color: $light-grey;
-    border-width: 10px;
-  }
-
-  &.bg-default:after {
-    border-top-color: $light-grey;
-  }
-
-  &.bg-disabled:after {
-    border-top-color: $mid-grey;
-  }
-
-  &.bg-primary:after {
-    border-top-color: $primary;
-  }
-  &.bg-secondary:after {
-    border-top-color: $secondary;
-  }
-  &.bg-success:after {
-    border-top-color: $success;
-  }
-  &.bg-info:after {
-    border-top-color: $info;
-  }
-  &.bg-warning:after {
-    border-top-color: $warning;
-  }
-  &.bg-error:after {
-    border-top-color: $error;
+div.tooltip-warning {
+  background-color : $redDark;
+  height           : 15px;
+  width            : 15px;
+  border-radius    : 50%;
+  position         : absolute;
+  right            : 3px;
+  top              : 13px;
+  padding          : 0;
+  line-height      : 15px;
+  text-align       : center;
+  font-weight      : bold;
+  a {
+    color            : white;
   }
 }
+

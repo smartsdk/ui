@@ -123,17 +123,17 @@ export default Ember.Mixin.create({
       case NONE:
         return 'hide';
       case CURRENT:
+        return 'btn-info';
       case LOADING:
-        return 'bg-transparent';
       case NOTFOUND:
       case ERROR:
       case INPROGRESS:
-        return 'bg-disabled';
+        return 'btn-disabled';
       case REQUIRED:
-        return 'bg-error';
+        return 'btn-danger';
       case AVAILABLE:
       case UPGRADED:
-        return 'bg-warning';
+        return 'btn-warning';
     }
   }),
 

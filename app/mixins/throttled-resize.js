@@ -5,13 +5,13 @@ export default Ember.Mixin.create({
   throttleTimer: null,
   resizeInterval: 200,
 
-  init: function() {
-    this._super(...arguments);
+  setup: function() {
+
     this.set('boundResize', this.triggerResize.bind(this));
-    Ember.$(window).on('resize', this.get('boundResize'));
-    Ember.$(window).on('focus', this.get('boundResize'));
+    $(window).on('resize', this.get('boundResize'));
+    $(window).on('focus', this.get('boundResize'));
     Ember.run.next(this,'onResize');
-  },
+  }.on('init'),
 
   triggerResize: function() {
     var timer = Ember.run.throttle(this, 'onResize', this.get('resizeInterval'), false);
@@ -24,7 +24,7 @@ export default Ember.Mixin.create({
 
   willDestroyElement: function() {
     Ember.run.cancel(this.get('throttleTimer'));
-    Ember.$(window).off('resize', this.get('boundResize'));
-    Ember.$(window).off('focus', this.get('boundResize'));
+    $(window).off('resize', this.get('boundResize'));
+    $(window).off('focus', this.get('boundResize'));
   },
 });

@@ -5,7 +5,7 @@
   }
 
   TH {
-    font-weight: bold;
+    font-weight: $bold-weight;
   }
 
   .logo-text {
@@ -53,4 +53,8 @@
   100% {
     transform: translate(-100px,500px) scale(0);
   }
+}
+
+@media (max-width: $screen-sm-max) {
+
 }

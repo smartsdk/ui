@@ -1,18 +1,21 @@
 $container-height: 300px;
-$container-width: 285px;
+$container-width: 250px;
+$play-button-height-width: 60px;
 $font-size: 12px;
 $line-height: 1.4;
 $lines-to-show: 4;
 
 .catalog-box {
-  position: relative;  
+  position: relative;
+  background: $accent-one;
+  border:solid transparent;
   height: $container-height;
   width: $container-width;
-  margin: 15px 0 15px 15px;
+  margin: 15px;
   float: left;
   text-align: center;
+  box-shadow: 0 0 5px rgba(0,0,0,.15);
   transition: ease all .25s;
-  border: $border solid 3px;
 
   .footer {
     position: absolute;
@@ -32,16 +35,17 @@ $lines-to-show: 4;
   }
 
   &:hover {
-    border: solid $primary;
+    border: solid $blueTwo;
   }
 
   .itemwrap {
-    max-height: 129px;
+    max-height: 119px;
     overflow: hidden;
   }
 
   h5 {
     text-align: center;
+    padding-top: 15px;
     margin: 0 15px;
     font-weight: bold;
   }
@@ -73,8 +77,34 @@ $lines-to-show: 4;
     }
   }
 
+//  .inactive-driver {
+//    position: absolute;
+//    top: -3px;
+//    left: -3px;
+//    text-align: center;
+//    height: $container-height;
+//    width: $container-width;
+//    background: rgba(0,0,0,0.4);
+//    z-index: 2;
+//    button {
+//      color: white;
+//      border-color: white;
+//      position: absolute;
+//      height: $play-button-height-width;
+//      width: $play-button-height-width;
+//      border-radius: 50%;
+//      top: 70px;
+//      left: calc((#{$container-width} / 2) - (#{$play-button-height-width / 2}));
+//      i {
+//        font-size: 36px;
+//        margin-left: -3px;
+//      }
+//    }
+//  }
+
   .catalog-icon {
     margin: 0 auto;
+    line-height: 80px;
     padding: 15px 5px 5px 5px;
     background: rgba(255,255,255,.9);
     min-height: 110px;
@@ -105,29 +135,28 @@ $lines-to-show: 4;
   .badge-rancher {
     position: absolute;
     z-index: 1;
-    background: $warning;
-    color: black;
-    padding: 0 10px 0 5px;
+    background: $primary;
+    color: white;
+    padding: 3px 10px;
     right: -13px;
     top: 5px;
-    font-size: .75em;
-    color: white;
 
     &:before {
       content: "";
       border-style: solid;
-      border-color: $warning;
+      border-color: $primary;
       border-left-color: transparent;
       position: absolute;
       top: 0;
       left: -16px;
-      border-width: 11.5px;
+      border-width: 13.5px;
+      height: 27px;
       z-index: 2;
     }
 
     &:after {
       content: "";
-      border-color: darken($warning, 20%) transparent transparent darken($warning, 20%);
+      border-color: $primaryDark transparent transparent $primaryDark;
       border-style: solid;
       border-width: 5px;
       right: 0px;
@@ -158,30 +187,31 @@ $lines-to-show: 4;
 
   .badge-partner {
     @extend .badge-rancher;
+    background-color: $greenTwo;
     color: black;
-    background-color: $success;
 
     &:before {
-      border-color: $success;
+      border-color: $greenTwo;
       border-left-color: transparent;
     }
 
     &:after {
-      border-color: darken($success, 20%) transparent transparent darken($success, 20%);
+      border-color: $greenTwoDark transparent transparent $greenTwoDark;
     }
   }
 
   .badge-thirdparty {
     @extend .badge-rancher;
-    background-color: $primary;
+    background-color: $lightTeal;
+    color: black;
 
     &:before {
-      border-color: $primary;
+      border-color: $lightTeal;
       border-left-color: transparent;
     }
 
     &:after {
-      border-color: darken($primary, 20%) transparent transparent darken($primary, 20%);
+      border-color: $lightTealDark transparent transparent $lightTealDark;
     }
   }
 

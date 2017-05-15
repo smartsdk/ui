@@ -4,7 +4,6 @@ import { parseExternalId } from 'ui/utils/parse-externalid';
 import C from 'ui/utils/constants';
 import { download } from 'ui/utils/util';
 import { denormalizeIdArray } from 'ember-api-store/utils/denormalize';
-import StateCounts from 'ui/mixins/state-counts';
 
 export function activeIcon(stack)
 {
@@ -37,20 +36,13 @@ export function tagChoices(all) {
   return choices;
 }
 
-var Stack = Resource.extend(StateCounts, {
-
+var Stack = Resource.extend({
   type: 'stack',
   k8s: Ember.inject.service(),
   modalService: Ember.inject.service('modal'),
   projectsService: Ember.inject.service('projects'),
 
   services: denormalizeIdArray('serviceIds'),
-  realServices: Ember.computed.filterBy('services','isReal',true),
-
-  init() {
-    this._super(...arguments);
-    this.defineStateCounts('services', 'serviceStates', 'serviceCountSort');
-  },
 
   actions: {
     activateServices: function() {
@@ -86,7 +78,7 @@ var Stack = Resource.extend(StateCounts, {
 
 
     addService: function() {
-      this.get('router').transitionTo('scalin-groups.new', {
+      this.get('router').transitionTo('service.new', {
         queryParams: {
           stackId: this.get('id'),
         },
@@ -94,7 +86,7 @@ var Stack = Resource.extend(StateCounts, {
     },
 
     addBalancer: function() {
-      this.get('router').transitionTo('balancers.new', {
+      this.get('router').transitionTo('service.new-balancer', {
         queryParams: {
           stackId: this.get('id'),
         },
@@ -106,8 +98,7 @@ var Stack = Resource.extend(StateCounts, {
     },
 
     exportConfig: function() {
-      var url = this.get('endpointSvc').addAuthParams(this.linkFor('composeConfig'));
-      download(url);
+      download(this.linkFor('composeConfig'));
     },
 
     viewCode: function() {
@@ -216,15 +207,6 @@ var Stack = Resource.extend(StateCounts, {
     return parseExternalId(this.get('externalId'));
   }.property('externalId'),
 
-  isDefault: function() {
-    return (this.get('name')||'').toLowerCase() === 'default';
-  }.property('name'),
-
-  isFromCatalog: function() {
-    let kind = this.get('externalIdInfo.kind');
-    return kind === C.EXTERNAL_ID.KIND_CATALOG || kind === C.EXTERNAL_ID.KIND_SYSTEM_CATALOG;
-  }.property('externalIdInfo.kind'),
-
   grouping: function() {
     var kind = this.get('externalIdInfo.kind');
 
@@ -259,7 +241,7 @@ var Stack = Resource.extend(StateCounts, {
 
     let have = this.get('tags');
     for ( let i = 0 ; i < want.length ; i++ ) {
-      if ( !have.includes(want[i]) ) {
+      if ( !have.contains(want[i]) ) {
         return false;
       }
     }

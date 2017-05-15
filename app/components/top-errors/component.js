@@ -3,7 +3,7 @@ import Ember from 'ember';
 export default Ember.Component.extend({
   errors: null,
 
-  classNames: ['banner','bg-error'],
+  classNames: ['top-errors','alert','alert-danger'],
   classNameBindings: ['errors.length::hide'],
 
   errorsDidChange: function() {

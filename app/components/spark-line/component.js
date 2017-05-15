@@ -36,6 +36,15 @@ export default Ember.Component.extend({
   y             : null,
   tooltipModel: null,
 
+  init() {
+    window.spark = this;
+    this._super();
+  },
+
+  didInsertElement() {
+    this._super();
+  },
+
   hasData: function() {
     if (this.get('data.length') > 0 && !this.get('svg')) {
       this.create();
@@ -66,10 +75,6 @@ export default Ember.Component.extend({
     }
 
     Ember.run.next(() => {
-      if ( this.isDestoyed || this.isDestroying ) {
-        return;
-      }
-
       this.set('tooltipModel', out);
     });
   }.property('prefix', 'lastValue', 'formatter'),
@@ -130,13 +135,13 @@ export default Ember.Component.extend({
         out = '#2ecc71'; //$green
         break;
       case 'memory':
-        out = '#00558b'; //$primary-dark
+        out = '#00558b'; //$blueDark
         break;
       case 'network':
-        out = '#d35401'; //mix($warning, $error, 20%)Dark
+        out = '#d35401'; //$orangeDark
         break;
       case 'storage':
-        out = '#3a6f81'; //$info
+        out = '#3a6f81'; //$teal
         break;
       default:
         break;

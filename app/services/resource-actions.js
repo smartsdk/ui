@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import { positionDropdown } from 'ui/utils/position-dropdown';
+import BootstrapFixes from 'ui/utils/bootstrap-fixes';
 
 export default Ember.Service.extend({
   model          : null,
@@ -52,7 +52,7 @@ export default Ember.Service.extend({
       this.set('open',true);
       // Delay ensure it works in firefox
       Ember.run.next(() => {
-        positionDropdown($menu, trigger, true);
+        BootstrapFixes.positionDropdown($menu, trigger, true);
         $('#resource-actions-first')[0].focus();
         $menu.css('visibility','visible');
       });

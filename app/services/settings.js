@@ -170,24 +170,18 @@ export default Ember.Service.extend(Ember.Evented, {
     return this.get('_plValue').toUpperCase() === C.COOKIE.PL_RANCHER_VALUE.toUpperCase();
   }.property('_plValue'),
 
-  isEnterprise: function() {
-    return this.get('rancherImage') === 'rancher/enterprise';
+  isOSS: function() {
+    return this.get('rancherImage') === 'rancher/server';
   }.property('rancherImage'),
 
   appName: function() {
-    var isCaas = this.get('app.mode') === 'caas' ? true : false;
-
-    if (isCaas) {
-      return 'Rancher Container Cloud';
-    } else {
-      if ( this.get('isRancher') )
-      {
-        return this.get('app.appName'); // Rancher
-      }
-      else
-      {
-        return this.get('_plValue');
-      }
+    if ( this.get('isRancher') )
+    {
+      return this.get('app.appName'); // Rancher
+    }
+    else
+    {
+      return this.get('_plValue');
     }
   }.property('isRancher','_plValue'),
 
@@ -205,11 +199,9 @@ export default Ember.Service.extend(Ember.Evented, {
 
   docsBase: function() {
     let full = this.get('rancherVersion');
-    let version;
+    let version = 'latest';
     if ( full ) {
       version = minorVersion(full);
-    } else {
-      version = minorVersion(this.get('uiVersion'));
     }
 
     let lang = ((this.get('intl._locale')||[])[0]||'').replace(/-.*$/,'');

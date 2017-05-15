@@ -3,7 +3,6 @@ import C from 'ui/utils/constants';
 
 export default Ember.Service.extend({
   userStore: Ember.inject.service('user-store'),
-  settings: Ember.inject.service(),
 
   unremoved: function() {
     return this.get('userStore').all('userpreference');
@@ -80,41 +79,12 @@ export default Ember.Service.extend({
     this.endPropertyChanges();
   },
 
-  tablePerPage: Ember.computed(C.PREFS.TABLE_COUNT, function() {
-    let out = parseInt(this.get(C.PREFS.TABLE_COUNT),10);
+  tablePerPage: Ember.computed(`${C.PREFS.TABLE_COUNT}`, function() {
+    let out = this.get(`${C.PREFS.TABLE_COUNT}`);
     if ( !out ) {
       out = C.TABLES.DEFAULT_COUNT;
     }
 
     return out;
-  }),
-
-  showSystemControl: Ember.computed(C.PREFS.SHOW_SYSTEM,`settings.${C.SETTING.SHOW_SYSTEM}`, function() {
-    let def = this.get(`settings.${C.SETTING.SHOW_SYSTEM}`);
-    return ['always','never'].includes(def) === false;
-  }),
-
-  showSystemResources: Ember.computed(C.PREFS.SHOW_SYSTEM,`settings.${C.SETTING.SHOW_SYSTEM}`, {
-    get() {
-      let def = this.get(`settings.${C.SETTING.SHOW_SYSTEM}`);
-      let user = this.get(C.PREFS.SHOW_SYSTEM);
-
-      switch ( def ) {
-        case 'always':
-          return true;
-        case 'never':
-          return false;
-        case 'default_hide':
-          return user !== true;
-        default:
-          // also 'default_show':
-          return user !== false;
-      }
-    },
-
-    set(key, value) {
-      this.set(C.PREFS.SHOW_SYSTEM, value);
-      return value;
-    }
   }),
 });

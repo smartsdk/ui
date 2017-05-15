@@ -1,3 +1,230 @@
+$stackHeight: 66px;
+$stateRadius: 13px;
+$stateBorder: 2px;
+$singleStackHeight: 30px;
+$countWidth: 102px;
+$singleCountWidth : 120px;
+
+.stack-section {
+  clear: both;
+  position: relative;
+  background-color: $table-bg;
+  margin: 0 20px 10px 20px;
+
+  &.clear-section {
+    margin: 0px;
+    background-color: transparent;
+  }
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  .stack-state {
+    text-align: center;
+    height: $stackHeight;
+    line-height: $stackHeight;
+    padding: 0 10px;
+  }
+
+  .count {
+    width: $countWidth;
+    text-align: center;
+
+    P {
+      margin: 12px 0 0 0;
+      font-weight: $bold-weight;
+      text-align: center;
+      position: relative;
+      top: 5px;
+    }
+
+    LABEL {
+      color: #a7a7a7;
+    }
+  }
+
+  .header-left {
+    float: left;
+    margin-right: 10px;
+    height: $stackHeight;
+    line-height: $stackHeight;
+
+    H4 {
+      line-height: $stackHeight;
+    }
+
+    .stack-link {
+      max-width: 370px;
+    }
+
+    &.with-description {
+      line-height: initial;
+      padding-top: 13px;
+      max-width: 370px;
+
+      H4 {
+        line-height: initial;
+      }
+    }
+  }
+
+  .header-right {
+    float: right;
+    margin-right: 7px;
+    height: $stackHeight;
+  }
+
+  .right-divider {
+    padding-right: 10px;
+    border-right: 1px dotted $table-border-color;
+
+  }
+
+  .collapser {
+    height: $stackHeight;
+    line-height: 50px;
+    A {
+      padding: 22px 10px 25px 10px;
+      font-size: 12px;
+    }
+  }
+
+  .stack-actions {
+    line-height: 66px;
+    width: 65px;
+    text-align: right;
+    border-right: 0;
+  }
+
+  .stack-body {
+    // padding: 0 10px 10px 10px;
+    background: transparent;
+  }
+
+  .stack-template {
+    line-height: 60px;
+    text-align: center;
+  }
+
+  .collapser {
+    padding: 3px 0;
+  }
+
+  .grid {
+    .state > span > span {
+    padding: 14px 5.5px;
+    margin-right: 5px;
+    }
+
+    TD, TH {
+      padding: 3px;
+      border-bottom: 1px solid $table-border-color ;
+    }
+
+    &.sized {
+      TD:nth-child(1) {
+        width: 125px;
+        padding: 0;
+      }
+
+      TD:nth-child(4),
+      TD:nth-child(5) {
+        width: ($countWidth + 7);
+        text-align: center;
+      }
+
+      TD.actions {
+        width: 80px;
+      }
+    }
+
+    TD.actions {
+      text-align: center;
+    }
+
+    TR:nth-child(even) {
+      background-color: $table-bg-accent;
+    }
+
+    TR:nth-child(odd) {
+      background-color: transparent;
+    }
+
+    TD {
+      border-right: 1px dotted $table-border-color;
+      padding: 10px;
+
+      &:last-of-type {
+        border-right: none;
+      }
+    }
+
+    TH {
+      padding-left: 10px;
+    }
+  }
+
+  .subsection {
+    H6 {
+      background-color: $brand-info;
+      color: white;
+      padding: 10px;
+    }
+
+    & .hosts {
+      background: rgba($brand-info, .15);
+    }
+
+    .clip {
+      max-width: 250px;
+    }
+  }
+
+  .single {
+    color: white;
+    background: $midGray;
+
+    .count {
+      width: $singleCountWidth;
+    }
+    .count LABEL,
+    .count P,
+    &>A:not(.btn),
+    &>BUTTON:not(.btn),
+    A.btn-link {
+      color: white;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: $singleStackHeight;
+      margin: 0;
+      top: 0;
+    }
+
+    .stack-state {
+      top: ($singleStackHeight - $stateBorder)/2 - $stateRadius;
+    }
+
+    .header-left {
+    height: $singleStackHeight;
+    line-height: $singleStackHeight;
+
+      H4 {
+        line-height: $singleStackHeight;
+      }
+    }
+
+    .header-right, .collapser {
+      height: $singleStackHeight;
+    }
+  }
+
+
+  .stack-body.single-body .grid TD:nth-child(4),
+  .stack-body.single-body .grid TD:nth-child(5) {
+      width: ($singleCountWidth + 10);
+  }
+}
+
 .stack-graph {
   SECTION.header {
     position: relative;
@@ -20,23 +247,23 @@
     }
 
     &.success rect {
-      stroke: $success;
+      stroke: $brand-success;
     }
 
     &.info rect {
-      stroke: $info;
+      stroke: $brand-info;
     }
 
     &.warning rect {
-      stroke: $warning;
+      stroke: $brand-warning;
     }
 
     &.danger rect {
-      stroke: $error;
+      stroke: $brand-danger;
     }
 
     .highlighted {
-      box-shadow: 2px 2px 10px $primary-dark;
+      box-shadow: 2px 2px 10px $blueDark;
     }
 
     g {
@@ -51,7 +278,7 @@
         color: $text-color;
 
         $dark: $accent-two;
-        $light: $body-bg;
+        $light: $well-bg;
 
         background: $light; /* Old browsers */
         background: -moz-linear-gradient(top, $dark 0%, $dark 50%, $light 51%, $light 100%); /* FF3.6+ */
@@ -78,7 +305,7 @@
       border-radius: initial;
 
       tspan {
-        fill: $body-bg;
+        fill: $well-bg;
       }
 
       I.icon {
@@ -101,23 +328,23 @@
         color: white;
         padding: 0 5px;
         font-size: 11px;
-        font-weight: bold;
+        font-weight: $bold-weight;
         text-transform: uppercase;
 
         &.success {
-          background-color: $success;
+          background-color: $brand-success;
         }
 
         &.info {
-          background-color: $info;
+          background-color: $brand-info;
         }
 
         &.warning {
-          background-color: $warning;
+          background-color: $brand-warning;
         }
 
         &.danger {
-          background-color: $error;
+          background-color: $brand-danger;
         }
       }
     }
@@ -137,33 +364,40 @@
     }
 
     &.success path.path {
-      stroke: $success;
+      stroke: $brand-success;
     }
     &.info path.path {
-      stroke: $info;
+      stroke: $brand-info;
     }
     &.warning path.path {
-      stroke: $warning;
+      stroke: $brand-warning;
     }
     &.danger path.path {
-      stroke: $error;
+      stroke: $brand-danger;
     }
   }
   marker path {
     &.success-fill {
-      fill: $success;
+      fill: $brand-success;
     }
     &.info-fill {
-      fill: $info;
+      fill: $brand-info;
     }
     &.warning-fill {
-      fill: $warning;
+      fill: $brand-warning;
     }
     &.danger-fill {
-      fill: $error;
+      fill: $brand-danger;
     }
   }
 }
+
+$light-grey: #9CB6B5;
+$tiffany-blue: #0ABFB2;
+$mabel: #CCE3EE;
+$regal-blue: #034967;
+$orange-white: #FFF9EC;
+$light-yellow: #FFBE18;
 
 #chart-svg {
   @extend #stack-svg;
@@ -182,8 +416,8 @@
     .badge {
       margin-right: 5px;
       margin-top: 6px;
-      background-color: mix($warning, $error, 20%)-white;
-      color: $warning;
+      background-color: $orange-white;
+      color: $light-yellow;
     }
     .container-badge {
       width: 100%;
@@ -191,15 +425,15 @@
     }
     .badge {
       &.service {
-        color: $info;
-        background-color: $light-grey;
+        color: $regal-blue;
+        background-color: $mabel;
         font-size: 12px;
         padding: 2px 15px;
         text-transform: uppercase;
       }
     }
     .label-sidekick {
-      background: light-grey;
+      background: lightgray;
       font-size: 10px;
       padding: 1px 13px;
       margin-top: 7px;
@@ -222,5 +456,53 @@
     fill: none;
     stroke: $light-grey;
     stroke-width: 2px;
+  }
+}
+
+.check-kubernetes,
+.check-swarm {
+  background-position: top center;
+  background-repeat: no-repeat;
+  background-size: 50px;
+  padding-top: 60px;
+}
+
+.check-swarm {
+  background-image: url('images/hexagon-swarm.svg');
+}
+
+.check-kubernetes {
+  background-image: url('images/hexagon-kubernetes.svg');
+}
+
+.service-icon-button {
+  cursor: pointer;
+  padding-left: 3px;
+  padding-right: 3px;
+}
+
+.service-detail {
+  SPAN {
+    margin-right: 5px;
+  }
+
+  LABEL {
+    font-weight: normal;
+    padding-right: 3px;
+    color: $text-muted;
+    margin-bottom: 0;
+
+    &:not(:first-of-type) {
+      margin-left: 5px;
+    }
+  }
+}
+
+.storage {
+  &.stack-section .header-left H4 {
+    line-height: 0;
+    display: inline-block;
+    vertical-align: middle;
+    padding-left: 10px;
   }
 }

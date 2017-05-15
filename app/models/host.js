@@ -5,27 +5,16 @@ import { formatMib, formatSi } from 'ui/utils/util';
 import C from 'ui/utils/constants';
 import { denormalizeIdArray } from 'ember-api-store/utils/denormalize';
 import { satisfies, compare } from 'ui/utils/parse-version';
-import StateCounts from 'ui/mixins/state-counts';
 
-var Host = Resource.extend(StateCounts,{
+var Host = Resource.extend({
   type: 'host',
   modalService: Ember.inject.service('modal'),
   settings: Ember.inject.service(),
-  prefs: Ember.inject.service(),
-
-  init() {
-    this._super(...arguments);
-    this.defineStateCounts('arrangedInstances', 'instanceStates', 'instanceCountSort');
-  },
 
   instances: denormalizeIdArray('instanceIds'),
   arrangedInstances: function() {
-    let out = this.get('instances').sortBy('system','displayName');
-    if ( !this.get('prefs.showSystemResources') ) {
-      out = out.filterBy('isSystem',false);
-    }
-    return out;
-  }.property('instances.@each.{isSystem,displayName}','prefs.showSystemResources'),
+    return this.get('instances').sortBy('isSystem','displayName');
+  }.property('instances.@each.{isSystem,displayName}'),
 
   actions: {
     activate: function() {
@@ -66,7 +55,6 @@ var Host = Resource.extend(StateCounts,{
       var url = this.linkFor('config');
       if ( url )
       {
-        url = this.get('endpointSvc').addAuthParams(url);
         Util.download(url);
       }
     }
@@ -76,11 +64,11 @@ var Host = Resource.extend(StateCounts,{
     var a = this.get('actionLinks');
 
     var out = [
-      { label: 'action.activate',   icon: 'icon icon-play',         action: 'activate',     enabled: !!a.activate, bulkable: true},
-      { label: 'action.deactivate', icon: 'icon icon-pause',        action: 'deactivate',   enabled: !!a.deactivate, bulkable: true},
-      { label: 'action.evacuate',   icon: 'icon icon-snapshot',     action: 'promptEvacuate',enabled: !!a.evacuate, altAction: 'evacuate', bulkable: true},
-      { label: 'action.remove',     icon: 'icon icon-trash',        action: 'promptDelete', enabled: !!a.remove, altAction: 'delete', bulkable: true},
-      { label: 'action.purge',      icon: '',                       action: 'purge',        enabled: !!a.purge},
+      { label: 'action.activate',   icon: 'icon icon-play',         action: 'activate',      enabled: !!a.activate},
+      { label: 'action.deactivate', icon: 'icon icon-pause',        action: 'deactivate',    enabled: !!a.deactivate},
+      { label: 'action.evacuate',   icon: 'icon icon-snapshot',     action: 'promptEvacuate',enabled: !!a.evacuate, altAction: 'evacuate'},
+      { label: 'action.remove',     icon: 'icon icon-trash',        action: 'promptDelete',  enabled: !!a.remove, altAction: 'delete'},
+      { label: 'action.purge',      icon: '',                       action: 'purge',         enabled: !!a.purge},
       { divider: true },
       { label: 'action.viewInApi',  icon: 'icon icon-external-link',action: 'goToApi',      enabled: true},
     ];
@@ -245,15 +233,18 @@ var Host = Resource.extend(StateCounts,{
     });
   }.property('publicEndpoints.@each.{ipAddress,port,serviceId,instanceId}'),
 
-  requireAnyLabelStrings: function() {
-    return  ((this.get('labels')||{})[C.LABEL.REQUIRE_ANY]||'')
-              .split(/\s*,\s*/)
-              .filter((x) => x.length > 0 && x !== C.LABEL.SYSTEM_TYPE);
+  requireAnyLabels: function() {
+    return  ((this.get('labels')||{})[C.LABEL.REQUIRE_ANY]||'').split(/\s*,\s*/).filter((x) => x.length > 0);
   }.property(`labels.${C.LABEL.REQUIRE_ANY}`),
 });
 
 Host.reopenClass({
   defaultSortBy: 'name,hostname',
+  stateMap: {
+    'active':           {icon: 'icon icon-host',    color: 'text-success'},
+    'provisioning':     {icon: 'icon icon-host',    color: 'text-info'},
+    'reconnecting':     {icon: 'icon icon-help',    color: 'text-danger'},
+  }
 });
 
 export default Host;

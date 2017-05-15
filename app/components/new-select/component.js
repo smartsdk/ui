@@ -11,7 +11,6 @@ export default Ember.Component.extend({
   optionDisabledPath: 'disabled',
   action: Ember.K, // action to fire on change
   value: null,
-  localizedPrompt: false,
   localizedLabel: false,
   disabled: false,
   attributeBindings: ['disabled'],

@@ -1,7 +1,6 @@
 .log-body {
   .log-msg {
     font-size: 11px;
-    color: $success;
   }
 
   &.hide-stdout .log-stdout,
@@ -10,11 +9,11 @@
    }
 
   .log-msg.log-stderr {
-    color: $error;
+    color: #f44;
   }
 
   .log-date {
-    color: $text-muted;
+    color: #999;
     padding-right: 10px;
   }
 }

@@ -1,5 +1,3 @@
-$gh-block-color: $text-color;
-
 .gh-block-list {
   margin-bottom: 0;
 
@@ -15,8 +13,6 @@ $gh-block-color: $text-color;
 .gh-block {
   .gh-block-content {
     line-height: initial;
-    padding: 20px;
-    background: lighten($accent-two, 20);
   }
 
   .gh-avatar {
@@ -28,11 +24,8 @@ $gh-block-color: $text-color;
     margin-left: 50px;
   }
 
-  .gh-block-name {
-    color: $gh-block-color;
-  }
   .gh-block-detail {
-    color: rgba($gh-block-color, .5);
+    @extend .text-muted;
   }
 
   .gh-action {
@@ -45,12 +38,12 @@ $gh-block-color: $text-color;
 }
 
 $size: 35px;
+$border: 2px;
 
 .gh-avatar {
   width: $size;
   height: $size;
   display: inline-block;
-  vertical-align: middle;
 
   IMG {
     width: 100%;
@@ -60,6 +53,6 @@ $size: 35px;
   .gh-placeholder {
     line-height: $size;
     text-align: center;
-    color: $light-grey;
+    color: $lightGray;
   }
 }

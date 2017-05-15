@@ -5,7 +5,8 @@ const DELAY = 1000;
 const DEFAULT_TEXT = 'copyToClipboard.tooltip';
 
 export default Ember.Component.extend({
-  tagName          : 'span',
+  tagName          : 'div',
+  classNames       : ['copy-button-container', 'inline-block'],
 
   model            : null,
 
@@ -13,7 +14,6 @@ export default Ember.Component.extend({
   buttonText       : null,
   tooltipText      : null,
   status           : null,
-  icon             : null,
   size             : null,
   target           : null,
   clipboardText    : null,
@@ -46,16 +46,16 @@ export default Ember.Component.extend({
 
   buttonClasses: Ember.computed('status', function() {
     let status = this.get('status');
-    let out = 'btn bg-transparent';
+    let out = '';
 
     if (status) {
-      out += ' text-success';
+      out = `btn btn-success`;
     } else {
-      out += ' text-muted';
+      out = `btn btn-primary`;
     }
 
     if (this.get('size')) {
-      out += ' small';
+      out = `${out} small btn-link`;
     }
 
     return out;

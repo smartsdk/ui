@@ -59,8 +59,6 @@ export function parseCatalogSetting(str) {
 export function getCatalogNames(str) {
   return Object.keys(parseCatalogSetting(str).catalogs).sort();
 }
-
-
 export function getCatalogSubtree(str, projId) {
   let repos = getCatalogNames(str);
   let showAll = repos.length > 1;
@@ -102,10 +100,6 @@ export function getCatalogSubtree(str, projId) {
       queryParams: {catalogId: 'community'}
     });
   }
-
-  // if ( out.length > 2 ) {
-  //   out.push({divider: true});
-  // }
 
   repos.forEach((repo) => {
     out.push({

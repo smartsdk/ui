@@ -24,6 +24,7 @@ export default Ember.Component.extend(HoverDropdown, {
   projects             : Ember.inject.service(),
   project              : Ember.computed.alias('projects.current'),
   projectId            : Ember.computed.alias(`tab-session.${C.TABSESSION.PROJECT}`),
+  catalog              : Ember.inject.service(),
   settings             : Ember.inject.service(),
   access               : Ember.inject.service(),
   prefs                : Ember.inject.service(),
@@ -34,15 +35,11 @@ export default Ember.Component.extend(HoverDropdown, {
   hasMesos             : Ember.computed.alias('projects.orchestrationState.hasMesos'),
   swarmReady           : Ember.computed.alias('projects.orchestrationState.swarmReady'),
   mesosReady           : Ember.computed.alias('projects.orchestrationState.mesosReady'),
-  isCaas               : Ember.computed.equal('app.mode',C.MODE.CAAS),
-  isOss                : Ember.computed.equal('app.mode',C.MODE.OSS),
-  accessEnabled        : Ember.computed.alias('access.enabled'),
-
   stacks               : null,
 
   // Component options
   tagName              : 'header',
-  classNames           : ['page-header'],
+  classNames           : ['clearfix','no-select'],
   dropdownSelector     : '.navbar .dropdown',
 
   actions: {
@@ -112,6 +109,8 @@ export default Ember.Component.extend(HoverDropdown, {
     'projects.orchestrationState',
     'project.virtualMachine',
     'stacks.@each.group',
+    'catalog.catalogs.@each.{id,name}',
+    `settings.${C.SETTING.CATALOG_URL}`,
     `prefs.${C.PREFS.ACCESS_WARNING}`,
     'access.enabled',
     'isAdmin'

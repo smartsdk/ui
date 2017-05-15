@@ -1,24 +1,30 @@
-{{#containers-header tags=tags}}
-  {{#unless simpleMode}}
-    <div class="btn-group p-0 mr-10">
-      {{#link-to "containers.index" projects.current.id (query-params mode="list") classNames="btn btn-sm bg-default" tooltip=(t 'nav.containers.groupNone')}}<i class="icon icon-hamburger-nav"></i>{{/link-to}}
-      {{#link-to "containers.index" projects.current.id (query-params mode="grouped") classNames="btn btn-sm bg-default" tooltip=(t 'nav.containers.groupStack')}}<i class="icon icon-tasks"></i>{{/link-to}}
-    </div>
-  {{/unless}}
+<section class="header clearfix">
+  <h1>{{t 'containersPage.index.header'}}</h1>
 
-  {{#link-to "new-stack" classNames="btn btn-sm bg-primary mr-10"}}{{t 'nav.containers.importCompose'}}{{/link-to}}
-  {{#link-to "containers.new" classNames="btn btn-sm bg-primary"}}{{t 'nav.containers.addContainer'}}{{/link-to}}
-{{/containers-header}}
+  {{#link-to "containers.new" classNames="btn btn-sm btn-primary"}}{{t 'containersPage.index.linkTo'}}{{/link-to}}
 
-<section class="instances r-pt5 r-pb5">
-  {{container-table
+  <div class="btn-group r-mr10 r-mt5" style="float: right;">
+    <label style="font-weight: normal;">{{input type="checkbox" checked=showSystem}} {{t 'hostsPage.index.showSystem'}}</label>
+  </div>
+</section>
+
+<section class="well instances r-pt5 r-pb5">
+  {{#sortable-table
+    classNames="lacsso grid sortable-table"
+    sorts=sorts
     body=filtered
     sortBy=sortBy
     bulkActions=true
-    search=true
-    paging=true
-    showHost=true
-    groupByKey=groupBy
-    groupByRef="stack"
-  }}
+    bulkActionCallee=(action 'applyBulkAction')
+    bulkActionsList=bulkActionsList
+    perPage=prefs.tablePerPage
+    headers=headers as |container kind|}}
+    {{#if (eq kind "row")}}
+      {{container-row model=container showCommand="column" showHost=true showActions=true showPrimaryActions=false}}
+    {{else if (eq kind "nomatch")}}
+      <tr><td colspan="{{headers.length}}" class="text-center text-muted lacsso pt-20 pb-20">{{t 'containersPage.index.table.body.noMatch'}}</td></tr>
+    {{else if (eq kind "norows")}}
+      <tr><td colspan="{{headers.length}}" class="text-center text-muted lacsso pt-20 pb-20">{{t 'containersPage.index.table.body.noData'}}</td></tr>
+    {{/if}}
+  {{/sortable-table}}
 </section>

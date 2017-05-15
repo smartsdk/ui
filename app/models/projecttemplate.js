@@ -12,7 +12,7 @@ var ProjectTemplate = Resource.extend(PolledResource, {
   },
 
   displayStacks: function() {
-    return (this.get('stacks')||[]).map((s) => s.get('name')).join(', ');
+    return (this.get('stacks')||[]).map((s) => s.name).join(', ');
   }.property('stacks.@each.name'),
 
   canEdit: function() {
@@ -33,6 +33,11 @@ var ProjectTemplate = Resource.extend(PolledResource, {
   }.property('canEdit'),
 
   icon: 'icon icon-file',
+
+  allThere: function() {
+    let bad = this.get('stacks').find((stack) => { return !stack.get('catalogTemplate'); });
+    return !bad;
+  }.property('stacks.@each.catalogTemplate'),
 
   summary: function() {
     let map = {

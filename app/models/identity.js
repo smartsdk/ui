@@ -10,13 +10,13 @@ var Identity = Resource.extend({
   isOrg: Ember.computed.equal('externalIdType', C.PROJECT.TYPE_ORG),
 
   avatarSrc: function() {
-    if ( this.get('profilePicture') )
+    if ( this.get('isGithub') && this.get('profilePicture') )
     {
       return this.get('profilePicture');
     }
     else
     {
-      return 'data:image/png;base64,' + new Identicon(AWS.util.crypto.md5(this.get('externalId')||'Unknown'), 80, 0.01).toString();
+      return 'data:image/png;base64,' + new Identicon(md5(this.get('externalId')||'Unknown'), 80, 0.01).toString();
     }
   }.property('isGithub','externalId','profilePicture'),
 

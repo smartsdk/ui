@@ -28,7 +28,7 @@
   }
 
   .error {
-    @extend .bg-error;
+    background: $brand-danger;
   }
 
   .message {

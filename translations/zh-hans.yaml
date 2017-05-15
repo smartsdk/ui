@@ -2013,6 +2013,8 @@ modalShell:
   title: '命令行:{instanceName}'
 newAliasService:
   header: 添加服务别名
+modalWechat:
+  title: '扫码关注Rancher中国微信技术群'
 newBalancer:
   tabs:
     ssl: SSL终止
@@ -2074,6 +2076,7 @@ pageFooter:
   faq: 常见问题
   issues: 提交问题
   forums: 论坛
+  wechat: 微信
   download:
     link: 下载CLI
 pageHeaderEnvironment:
@@ -2245,13 +2248,13 @@ waitMesos:
   addHost: '添加至少三台主机'
   activateHost: '等待主机激活'
   createStack: '创建 Mesos 系统应用栈'
-  startServices: '启动服务 ({sub} / {count})'
+  startServices: '启动服务'
   waitApi: '等待 Mesos Master'
 waitSwarm:
   addHost: '添加至少一台主机'
   activateHost: '等待主机激活'
   createStack: '创建 Swarm 系统应用栈'
-  startServices: '启动服务 ({sub} / {count})'
+  startServices: '启动服务'
 containerChoices:
   hostGroup: '主机:{name}'
   hostGroupWithState: '主机:{name}{state}'

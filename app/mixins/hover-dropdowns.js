@@ -1,10 +1,8 @@
 import Ember from 'ember';
 import C from 'ui/utils/constants';
-import { positionDropdown } from 'ui/utils/position-dropdown';
 
 const DROPDOWNCLOSETIMER = 250;
-const PARENT             = 'HEADER NAV';
-const SELECTOR           = 'NAV .dropdown';
+const SELECTOR           = '.navbar .dropdown';
 const WINDOW_SM          = 694;
 let timerObj             = null;
 let dropdown             = null;
@@ -229,12 +227,7 @@ export default Ember.Mixin.create({
     if (body.hasClass('touch')) {
       Ember.$('BODY').addClass('nav-dropdown-open');
     }
-
-    drpd.addClass('invisible');
     drpd.addClass('block');
-    positionDropdown(drpd, el, drpd.hasClass('dropdown-menu-right'));
-    drpd.removeClass('invisible');
-
     if (el.attr('aria-expanded')) {
       el.attr('aria-expanded', true);
     }
@@ -245,7 +238,7 @@ export default Ember.Mixin.create({
     if (body.hasClass('touch')) {
       Ember.$('BODY').removeClass('nav-dropdown-open');
     }
-    const navbar       = Ember.$(PARENT);
+    const navbar       = Ember.$('.navbar');
 
     dropdown = null;
 
