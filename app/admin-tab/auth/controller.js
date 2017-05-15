@@ -3,7 +3,7 @@ import Ember from 'ember';
 export default Ember.Controller.extend({
   access: Ember.inject.service(),
 
-  lastRoute: 'admin-tab.auth.github',
+  lastRoute: 'admin-tab.auth.fiware',
   drivers: function() {
 
     return [
