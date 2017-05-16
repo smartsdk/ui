@@ -10,7 +10,7 @@ var Identity = Resource.extend({
   isOrg: Ember.computed.equal('externalIdType', C.PROJECT.TYPE_ORG),
 
   avatarSrc: function() {
-    if ( this.get('isGithub') && this.get('profilePicture') )
+    if ( this.get('profilePicture') )
     {
       return this.get('profilePicture');
     }
