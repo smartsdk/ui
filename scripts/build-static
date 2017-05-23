@@ -106,12 +106,12 @@ while getopts ":dlustfv:c:p:" opt;do
 done
 
 # Why are you trying to do a build when there are uncommitted changes?
-#if [[ `git status --porcelain` ]]; then
-#  echo "There are uncommited changes.  Please check the number and try again."
-#  if [[ $FORCE -ne 1 ]]; then
-#    exit 1;
-#  fi
-#fi
+if [[ `git status --porcelain` ]]; then
+  echo "There are uncommited changes.  Please check the number and try again."
+  if [[ $FORCE -ne 1 ]]; then
+    exit 1;
+  fi
+fi
 
 # UPLOAD_LATEST=true is set by Drone for auto upload to CDN
 if [[ "${BRANCH}" == "master" ]] && [[ "${UPLOAD_LATEST}" == "true" ]]; then
