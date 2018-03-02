@@ -1,0 +1,79 @@
+<section>
+  {{#if access.enabled}}
+    <b>Fiware enabled</b>
+  {{else}}
+    <div class="banner bg-warning">
+      <div class="banner-icon"><span class="icon icon-alert"></span></div>
+      <div class="banner-message">
+        <p>Warning: Make sure to setup an API key for admin access before activating Fiware Access Control!</p>
+       </div>
+    </div>
+  {{/if}}
+</section>
+{{#if access.enabled}}
+  <section>
+    <h3>Authenticated with Fiware</h3>
+    <hr/>
+    <div><b>Client ID: </b> <span class="text-muted">{{fiwareConfig.clientId}}</span></div>
+  </section>
+  <hr/>
+  <hr/>
+  <section>
+    {{#if confirmDisable}}
+      <button class="btn bg-error" {{action "disable"}}>
+        <i class="icon icon-alert"></i> ARE YOU SURE?
+      </button>
+    {{else}}
+      <button class="btn bg-error" {{action "promptDisable"}}>
+        <i class="icon icon-umbrella"></i> DISABLE ACCESS CONTROL
+      </button>
+    {{/if}}
+
+  </section>
+{{/if}}
+
+{{#unless access.enabled}}
+  <form autcomplete="on">
+    <section>
+      <h4>Fiware authentication details</h4>
+      <hr/>
+      <p>Credentials:</p>
+      <div class="row">
+        <div class="col span-6">
+          <div class="inline-form">
+            <label>Client ID*</label>
+            {{input type="text" name="username" value=fiwareConfig.clientId classNames="form-control"}}
+          </div>
+        </div>
+        <div class="col span-6">
+          <div class="inline-form">
+            <label>Client Secret*</label>
+            {{input type="password" name="password" value=fiwareConfig.clientSecret classNames="form-control"}}
+          </div>
+        </div>
+        <div class="col span-6">
+          <div class="inline-form">
+            <label>Client Redirect URI*</label>
+            {{input type="text" name="redirecturi" value=fiwareConfig.redirecturi classNames="form-control" placeholder="This should match the callback URL in Fiware" data-placeholder-text="This should match the callback URL in Fiware"}}
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="inline-form">
+          <b>Click below to save and activate Access Control</b>
+          <hr/>
+          <button class="btn bg-primary" style="display: block;margin: 0 auto;" {{action "save"}}>
+            {{#if saving}}
+              <i class="icon icon-spinner icon-spin"></i> {{t 'generic.saving'}}
+            {{else if doneSaving}}
+              {{t 'generic.saved'}}
+            {{else}}
+              {{t 'generic.save'}}
+            {{/if}}
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </form>
+{{/unless}}
