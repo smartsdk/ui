@@ -21,5 +21,6 @@ npm install
 echo "Done"
 
 echo -n "Installing Bower packages..."
-bower install
+# Try to fix: ESUDO Cannot be run with sudo
+bower --allow-root install
 echo "Done"
