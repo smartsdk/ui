@@ -1,0 +1,29 @@
+# CI_BRANCH is needed by the upstream build script
+variables:
+  CI_BRANCH: $CI_COMMIT_REF_NAME
+
+image: ubuntu:xenial
+
+stages:
+  - compile
+  - upload
+
+compile:
+  stage: compile
+  script:
+    - apt update
+    - apt install --yes curl git make g++
+    - ./scripts/bootstrap
+    - ./scripts/update-dependencies
+    - ./scripts/build-static -f
+    # Move artifacts to our custom dir
+    - mkdir -p "${CI_PROJECT_DIR}/compile_artifacts"
+    - mv dist/static/* "${CI_PROJECT_DIR}/compile_artifacts"
+  artifacts:
+    paths:
+      - compile_artifacts
+
+upload:
+  stage: upload
+  script:
+  - ./.uploader
