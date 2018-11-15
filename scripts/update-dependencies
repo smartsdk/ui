@@ -18,8 +18,8 @@ git submodule update
 echo "Done"
 
 echo -n "Installing NPM packages..."
-npm ls --global --parseable --long --loglevel info
-npm config set loglevel info
+# npm ls --global --parseable --long --loglevel info
+# npm config set loglevel info
 npm install --verbose
 echo "Done"
 
