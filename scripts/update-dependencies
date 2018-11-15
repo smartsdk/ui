@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 set -u
 set -x
 
@@ -15,15 +14,16 @@ echo -n "Installing Submodules..."
 git submodule init
 git submodule sync
 git submodule update
-echo "Done"
+echo "Done Submodules"
 
 echo -n "Installing NPM packages..."
 # npm ls --global --parseable --long --loglevel info
 # npm config set loglevel info
 npm install
-echo "Done"
+npm install
+echo "Done NPM"
 
 echo -n "Installing Bower packages..."
 # Try to fix: ESUDO Cannot be run with sudo
 bower --allow-root install
-echo "Done"
+echo "Done Bower"
