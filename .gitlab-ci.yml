@@ -14,7 +14,7 @@ compile:
     - apt update
     - apt install --yes curl git make g++
     - ./scripts/bootstrap
-    - ./scripts/update-dependencies
+    - ./scripts/update-dependencies || true  # maybe the bower deprecation cause a failure
     - ./scripts/build-static -f
     # Move artifacts to our custom dir
     - mkdir -p "${CI_PROJECT_DIR}/compile_artifacts"
