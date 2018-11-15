@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
 set -u
+set -x
 
 # cd to app root
 CWD=$(dirname $0)
@@ -17,7 +18,9 @@ git submodule update
 echo "Done"
 
 echo -n "Installing NPM packages..."
-npm install
+npm ls --global --parseable --long --loglevel info
+npm config set loglevel info
+npm install --verbose
 echo "Done"
 
 echo -n "Installing Bower packages..."
