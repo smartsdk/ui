@@ -2,6 +2,12 @@
 variables:
   CI_BRANCH: $CI_COMMIT_REF_NAME
 
+# Cache node modules in between jobs
+cache:
+  key: cache-node_modules
+  paths:
+  - node_modules/
+
 image: ubuntu:xenial
 
 stages:
