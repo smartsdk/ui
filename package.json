@@ -1,6 +1,6 @@
 {
   "name": "ui",
-  "version": "1.6.49",
+  "version": "1.6.49-smartsdk",
   "private": true,
   "directories": {
     "doc": "doc",
